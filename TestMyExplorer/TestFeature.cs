@@ -22,7 +22,7 @@ namespace TestMyExplorer
         private WindowsAppFriend TestApp;
         private Process TestProcess;
         private dynamic MainWindow;
-        private MainWindowDriver MainWindowDriver;
+        private MainWindowDriver Driver;
 
         private string BeforeEnvironment { get; set; }
 
@@ -35,7 +35,7 @@ namespace TestMyExplorer
             TestProcess = Process.GetProcessById(TestApp.ProcessId);
             MainWindow = TestApp.Type("System.Windows.Application").Current.MainWindow;
 
-            MainWindowDriver = new MainWindowDriver(MainWindow);
+            Driver = new MainWindowDriver(MainWindow);
 
             BeforeEnvironment = Environment.CurrentDirectory;
             Environment.CurrentDirectory = Common.GetEnvironmentDirPath();
@@ -49,6 +49,16 @@ namespace TestMyExplorer
             TestProcess.Dispose();
 
             Environment.CurrentDirectory = BeforeEnvironment;
+        }
+
+        [TestMethod]
+        public void OpenFolder()
+        {
+            string folderPath = Common.GetFilePathOfDependentEnvironment("./TestData/Folder1");
+            Driver.OpenFolder(folderPath, 0, 0);
+            Assert.IsTrue(Driver.NowPath(0, 0).Contains("TestData/Folder1"));
+            Assert.IsTrue(Driver.ContainFile("text11.txt", 0, 0));
+            Assert.IsTrue(Driver.ContainFile("text12.txt", 0, 0));
         }
     }
 }
