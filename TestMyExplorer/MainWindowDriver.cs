@@ -13,10 +13,13 @@ namespace TestMyExplorer
 
         private TextBoxAdapter FolderPath { get; set; }
 
+        private ListBoxAdapter FileList { get; set; }
+
         public MainWindowDriver(dynamic mainWindow)
         {
             MainWindow = mainWindow;
             FolderPath = new TextBoxAdapter("Folder");
+            FileList = new ListBoxAdapter("FileList");
             Tree = new WindowControl(mainWindow).LogicalTree();
         }
 
@@ -32,7 +35,7 @@ namespace TestMyExplorer
 
         internal bool ContainFile(string fileName, int? row, int? col)
         {
-            throw new NotImplementedException();
+            return FileList.Contains(fileName, Tree);
         }
 
         public string GetFolderPath(int? row, int? col)
@@ -43,7 +46,7 @@ namespace TestMyExplorer
 
         internal bool ContainFolder(string folderName, int? row, int? col)
         {
-            throw new NotImplementedException();
+            return FileList.Contains(folderName, Tree);
         }
     }
 }

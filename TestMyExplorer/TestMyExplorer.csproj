@@ -90,6 +90,7 @@
   <ItemGroup>
     <Compile Include="Common.cs" />
     <Compile Include="DisplayControl.cs" />
+    <Compile Include="ListBoxAdapter.cs" />
     <Compile Include="MainWindowDriver.cs" />
     <Compile Include="TestFeature.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

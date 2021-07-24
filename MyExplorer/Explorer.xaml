@@ -9,7 +9,7 @@
     <Grid>
         <StackPanel>
             <TextBox x:Name="Folder" Text="{Binding FolderPath}"/>
-            <ListBox x:Name="FileList"/>
+            <ListBox x:Name="FileList" ItemsSource="{Binding FileList}"/>
         </StackPanel>
     </Grid>
 </UserControl>

@@ -59,6 +59,7 @@ namespace TestMyExplorer
             Assert.IsTrue(Driver.GetFolderPath(0, 0).Contains(@"\TestData\Folder1"));
             Assert.IsTrue(Driver.ContainFile("text11.txt", 0, 0));
             Assert.IsTrue(Driver.ContainFile("text12.txt", 0, 0));
+            Assert.IsTrue(Driver.ContainFolder("folder01", 0, 0));
         }
     }
 }

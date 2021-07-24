@@ -17,6 +17,17 @@ namespace MyExplorer
             }
         }
 
+        private List<string> _FileList = null;
+        public List<string> FileList
+        {
+            get => _FileList;
+            set
+            {
+                _FileList = value;
+                //NotifyPropertyChanged(nameof(FileList));
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void NotifyPropertyChanged(string name)
@@ -28,15 +39,23 @@ namespace MyExplorer
         public ExplorerData(string folderPath)
         {
             FolderPath = folderPath;
+            InitFileList(folderPath);
         }
 
-        //private void InitFileList(string folderPath)
-        //{
-        //    string[] files = System.IO.Directory.GetFiles(folderPath);
-        //    foreach (string file in files)
-        //    {
-        //        FileList.Items.Add(System.IO.Path.GetFileName(file));
-        //    }
-        //}
+        private void InitFileList(string folderPath)
+        {
+            FileList = new List<string>();
+            AddFiles(folderPath, System.IO.Directory.GetDirectories);
+            AddFiles(folderPath, System.IO.Directory.GetFiles);
+        }
+
+        private void AddFiles(string folderPath, Func<string, string[]> func)
+        {
+            string[] files = func(folderPath);
+            foreach (string file in files)
+            {
+                FileList.Add(System.IO.Path.GetFileName(file));
+            }
+        }
     }
 }
