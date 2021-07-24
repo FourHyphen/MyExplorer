@@ -22,9 +22,25 @@ namespace MyExplorer
             InitializeComponent();
         }
 
+        private void MenuOpenFolderClick(object sender, RoutedEventArgs e)
+        {
+            string folderPath = DialogOpenFolder.Show();
+            if (folderPath != null)
+            {
+                OpenFolder(folderPath);
+            }
+        }
+
+        private void OpenFolder(string folderPath)
+        {
+            // TODO: どのウィンドウにオープンするかを現在の状態から決定する
+            OpenFolder(folderPath, 0, 0);
+        }
+
         private void OpenFolder(string folderPath, int? row, int? col)
         {
-
+            Explorer ex = new Explorer(folderPath);
+            FoldersArea.Children.Add(ex);
         }
     }
 }

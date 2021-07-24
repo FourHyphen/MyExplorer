@@ -7,6 +7,15 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <DockPanel>
+            <Menu x:Name="Menu"
+                  DockPanel.Dock="Top">
+                <MenuItem Header="ファイル(_F)">
+                    <MenuItem Header="フォルダを開く(_O)" Click="MenuOpenFolderClick"/>
+                </MenuItem>
+            </Menu>
+
+            <Grid x:Name="FoldersArea"/>
+        </DockPanel>
     </Grid>
 </Window>
