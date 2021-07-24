@@ -24,7 +24,7 @@ namespace TestMyExplorer
 
         public static string GetFilePathOfDependentEnvironment(string filePath)
         {
-            return Environment.CurrentDirectory + filePath;
+            return System.IO.Path.GetFullPath(filePath);
         }
     }
 }

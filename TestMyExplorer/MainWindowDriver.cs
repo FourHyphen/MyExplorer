@@ -11,9 +11,12 @@ namespace TestMyExplorer
 
         private IWPFDependencyObjectCollection<System.Windows.DependencyObject> Tree { get; set; }
 
+        private TextBoxAdapter FolderPath { get; set; }
+
         public MainWindowDriver(dynamic mainWindow)
         {
             MainWindow = mainWindow;
+            FolderPath = new TextBoxAdapter("Folder");
             Tree = new WindowControl(mainWindow).LogicalTree();
         }
 
@@ -32,7 +35,13 @@ namespace TestMyExplorer
             throw new NotImplementedException();
         }
 
-        internal string NowPath(int? row, int? col)
+        public string GetFolderPath(int? row, int? col)
+        {
+            UpdateNowMainWindowStatus();
+            return FolderPath.Text(Tree);
+        }
+
+        internal bool ContainFolder(string folderName, int? row, int? col)
         {
             throw new NotImplementedException();
         }
