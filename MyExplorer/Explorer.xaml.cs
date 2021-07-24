@@ -19,11 +19,24 @@ namespace MyExplorer
     {
         public ExplorerData ExplorerData { get; set; }
 
-        public Explorer(string folderPath)
+        public Explorer(string folderPath, int row, int col)
         {
             InitializeComponent();
+            Init(folderPath, row, col);
+        }
+
+        private void Init(string folderPath, int row, int col)
+        {
             ExplorerData = new ExplorerData(folderPath);
             DataContext = ExplorerData;
+            SetElementsName(row, col);
+        }
+
+        private void SetElementsName(int row, int col)
+        {
+            string unique = row.ToString() + col.ToString();
+            Folder.Name = "Folder" + unique;
+            FileList.Name = "FileList" + unique;
         }
     }
 }

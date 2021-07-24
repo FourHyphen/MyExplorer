@@ -15,7 +15,9 @@
                 </MenuItem>
             </Menu>
 
-            <Grid x:Name="FoldersArea"/>
+            <Grid>
+                <StackPanel x:Name="FoldersArea" Orientation="Horizontal"/>
+            </Grid>
         </DockPanel>
     </Grid>
 </Window>

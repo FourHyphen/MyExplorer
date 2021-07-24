@@ -14,9 +14,10 @@ namespace TestMyExplorer
             ListBoxName = listBoxName;
         }
 
-        public bool Contains(string str, IWPFDependencyObjectCollection<System.Windows.DependencyObject> logicalTree)
+        public bool Contains(string str, int row, int col, IWPFDependencyObjectCollection<System.Windows.DependencyObject> logicalTree)
         {
-            WPFListBox listBox = GetListBox(ListBoxName, logicalTree);
+            string listBoxName = ListBoxName + row.ToString() + col.ToString();
+            WPFListBox listBox = GetListBox(listBoxName, logicalTree);
             for (int i = 0; i < listBox.ItemCount; i++)
             {
                 WPFListBoxItem item = listBox.GetItem(i);

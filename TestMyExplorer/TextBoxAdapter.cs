@@ -14,12 +14,13 @@ namespace TestMyExplorer
             TextBoxName = textBoxName;
         }
 
-        public string Text(IWPFDependencyObjectCollection<System.Windows.DependencyObject> logicalTree)
+        public string Text(int row, int col, IWPFDependencyObjectCollection<System.Windows.DependencyObject> logicalTree)
         {
-            var text = logicalTree.ByType<System.Windows.Controls.TextBox>().ByName(TextBoxName).Single();
+            string textBoxName = TextBoxName + row.ToString() + col.ToString();
+            var text = logicalTree.ByType<System.Windows.Controls.TextBox>().ByName(textBoxName).Single();
             if (text == null)
             {
-                Failure(MethodBase.GetCurrentMethod().Name, TextBoxName);
+                Failure(MethodBase.GetCurrentMethod().Name, textBoxName);
             }
 
             string str = text.ToString().Replace("System.Windows.Controls.TextBox: ", "");
