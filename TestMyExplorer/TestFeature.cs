@@ -52,18 +52,7 @@ namespace TestMyExplorer
         }
 
         [TestMethod]
-        public void OpenFolder()
-        {
-            string folderPath = Common.GetFilePathOfDependentEnvironment(@".\TestData\Folder1");
-            Driver.OpenFolder(folderPath, 0, 0);
-            Assert.IsTrue(Driver.GetFolderPath(0, 0).Contains(@"\TestData\Folder1"));
-            Assert.IsTrue(Driver.ContainFile("text11.txt", 0, 0));
-            Assert.IsTrue(Driver.ContainFile("text12.txt", 0, 0));
-            Assert.IsTrue(Driver.ContainFolder("folder01", 0, 0));
-        }
-
-        [TestMethod]
-        public void OpenTwoFolder()
+        public void OpenTwoFolders()
         {
             string folderPath = Common.GetFilePathOfDependentEnvironment(@".\TestData\Folder1");
             Driver.OpenFolder(folderPath, 0, 0);
