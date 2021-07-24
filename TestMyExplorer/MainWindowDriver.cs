@@ -23,14 +23,10 @@ namespace TestMyExplorer
             Tree = new WindowControl(mainWindow).LogicalTree();
         }
 
-        private void UpdateNowMainWindowStatus()
+        public string GetFolderPath(int row, int col)
         {
-            Tree = new WindowControl(MainWindow).LogicalTree();    // 現在の画面状況を取得
-        }
-
-        internal void OpenFolder(string folderPath, int row, int col)
-        {
-            MainWindow.OpenFolder(folderPath, row, col);
+            UpdateNowMainWindowStatus();
+            return FolderPath.Text(row, col, Tree);
         }
 
         internal bool ContainFile(string fileName, int row, int col)
@@ -38,15 +34,19 @@ namespace TestMyExplorer
             return FileList.Contains(fileName, row, col, Tree);
         }
 
-        public string GetFolderPath(int row, int col)
-        {
-            UpdateNowMainWindowStatus();
-            return FolderPath.Text(row, col, Tree);
-        }
-
         internal bool ContainFolder(string folderName, int row, int col)
         {
             return FileList.Contains(folderName, row, col, Tree);
+        }
+
+        internal void OpenFolder(string folderPath, int row, int col)
+        {
+            MainWindow.OpenFolder(folderPath, row, col);
+        }
+
+        private void UpdateNowMainWindowStatus()
+        {
+            Tree = new WindowControl(MainWindow).LogicalTree();    // 現在の画面状況を取得
         }
     }
 }
