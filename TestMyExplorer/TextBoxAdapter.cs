@@ -14,9 +14,9 @@ namespace TestMyExplorer
             TextBoxName = textBoxName;
         }
 
-        public string Text(int row, int col, IWPFDependencyObjectCollection<System.Windows.DependencyObject> logicalTree)
+        public string Text(int index, IWPFDependencyObjectCollection<System.Windows.DependencyObject> logicalTree)
         {
-            string textBoxName = TextBoxName + row.ToString() + col.ToString();
+            string textBoxName = TextBoxName + index.ToString();
             var text = logicalTree.ByType<System.Windows.Controls.TextBox>().ByName(textBoxName).Single();
             if (text == null)
             {

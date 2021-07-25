@@ -6,10 +6,15 @@
              xmlns:local="clr-namespace:MyExplorer"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <StackPanel>
-            <TextBox x:Name="Folder" Text="{Binding FolderPath}"/>
-            <ListBox x:Name="FileList" ItemsSource="{Binding FileList}"/>
-        </StackPanel>
-    </Grid>
+    <StackPanel x:Name="FolderArea"
+                Width="{Binding CanvasWidth}"
+                Height="{Binding CanvasHeight}">
+        <TextBox x:Name="Folder"
+                 Text="{Binding FolderPath}"
+                 ScrollViewer.HorizontalScrollBarVisibility="Auto"/>
+        <ListBox x:Name="FolderFileList"
+                 ItemsSource="{Binding FileList}"
+                 ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+    </StackPanel>
 </UserControl>

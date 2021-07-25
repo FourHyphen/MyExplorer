@@ -17,8 +17,6 @@ namespace MyExplorer
 {
     public partial class MainWindow : Window
     {
-        private int Already = -1;
-
         public MainWindow()
         {
             InitializeComponent();
@@ -33,32 +31,69 @@ namespace MyExplorer
             }
         }
 
+        private List<Explorer> Explorers { get; set; } = new List<Explorer>();
+
         private void OpenFolder(string folderPath)
         {
-            if (Already < 0)
-            {
-                OpenFolder(folderPath, 0, 0);
-            }
-            else if (Already == 0)
-            {
-                OpenFolder(folderPath, 0, 1);
-            }
-            else if (Already == 1)
-            {
-                OpenFolder(folderPath, 1, 0);
-            }
-            else if (Already == 2)
-            {
-                OpenFolder(folderPath, 1, 1);
-            }
-
-            Already++;
+            Explorer explorer = new Explorer(folderPath, Explorers.Count);
+            Explorers.Add(explorer);
+            DisplayExplorers();
+            SetExplorersPosition();
         }
 
-        private void OpenFolder(string folderPath, int row, int col)
+        private void DisplayExplorers()
         {
-            Explorer ex = new Explorer(folderPath, row, col);
-            FoldersArea.Children.Add(ex);
+            FoldersArea.Children.Clear();
+            foreach (Explorer explorer in Explorers)
+            {
+                FoldersArea.Children.Add(explorer);
+            }
+        }
+
+        private void SetExplorersPosition()
+        {
+            int width = (int)ActualWidth;
+            int height = (int)ActualHeight - 50;    // 50: 経験則
+            int scrollBar = 10;                     // 10: 経験則
+            if (Explorers.Count == 2)
+            {
+                width = width / 2 - scrollBar;
+            }
+            else if (Explorers.Count >= 3)
+            {
+                width = width / 2 - scrollBar;
+                height = height / 2 - scrollBar;
+            }
+
+            foreach (Explorer explorer in Explorers)
+            {
+                explorer.SetWidth(width);
+                explorer.SetHeight(height);
+            }
+
+            Canvas.SetLeft(Explorers[0], 0);
+            Canvas.SetTop(Explorers[0], 0);
+            if (Explorers.Count == 2)
+            {
+                Canvas.SetLeft(Explorers[1], Explorers[0].CanvasWidth + 1);
+                Canvas.SetTop(Explorers[1], 0);
+            }
+            else if (Explorers.Count == 3)
+            {
+                Canvas.SetLeft(Explorers[1], Explorers[0].CanvasWidth + 1);
+                Canvas.SetTop(Explorers[1], 0);
+                Canvas.SetLeft(Explorers[2], 0);
+                Canvas.SetTop(Explorers[2], Explorers[0].CanvasHeight + 1);
+            }
+            else if (Explorers.Count == 4)
+            {
+                //Explorers[1].CanvasLeft = Explorers[0].CanvasWidth + 1;
+                //Explorers[1].CanvasTop = 0;
+                //Explorers[2].CanvasLeft = 0;
+                //Explorers[2].CanvasTop = Explorers[0].CanvasHeight + 1;
+                //Explorers[3].CanvasLeft = Explorers[0].CanvasWidth + 1;
+                //Explorers[3].CanvasTop = Explorers[0].CanvasHeight + 1;
+            }
         }
     }
 }

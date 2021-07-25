@@ -55,19 +55,19 @@ namespace TestMyExplorer
         public void OpenTwoFolders()
         {
             string folderPath = Common.GetFilePathOfDependentEnvironment(@".\TestData\Folder1");
-            Driver.OpenFolder(folderPath, 0, 0);
+            Driver.OpenFolder(folderPath);
             string folderPath2 = Common.GetFilePathOfDependentEnvironment(@".\TestData\Folder2");
-            Driver.OpenFolder(folderPath2, 1, 0);
+            Driver.OpenFolder(folderPath2);
 
-            Assert.IsTrue(Driver.GetFolderPath(0, 0).Contains(@"\TestData\Folder1"));
-            Assert.IsTrue(Driver.ContainFile("text11.txt", 0, 0));
-            Assert.IsTrue(Driver.ContainFile("text12.txt", 0, 0));
-            Assert.IsTrue(Driver.ContainFolder("folder01", 0, 0));
+            Assert.IsTrue(Driver.GetFolderPath(0).Contains(@"\TestData\Folder1"));
+            Assert.IsTrue(Driver.ContainFile("text11.txt", 0));
+            Assert.IsTrue(Driver.ContainFile("text12.txt", 0));
+            Assert.IsTrue(Driver.ContainFolder("folder01", 0));
 
-            Assert.IsTrue(Driver.GetFolderPath(1, 0).Contains(@"\TestData\Folder2"));
-            Assert.IsTrue(Driver.ContainFile("text21.txt", 1, 0));
-            Assert.IsTrue(Driver.ContainFile("text22.txt", 1, 0));
-            Assert.IsTrue(Driver.ContainFolder("folder02", 1, 0));
+            Assert.IsTrue(Driver.GetFolderPath(1).Contains(@"\TestData\Folder2"));
+            Assert.IsTrue(Driver.ContainFile("text21.txt", 1));
+            Assert.IsTrue(Driver.ContainFile("text22.txt", 1));
+            Assert.IsTrue(Driver.ContainFolder("folder02", 1));
         }
     }
 }

@@ -23,25 +23,25 @@ namespace TestMyExplorer
             Tree = new WindowControl(mainWindow).LogicalTree();
         }
 
-        public string GetFolderPath(int row, int col)
+        public string GetFolderPath(int index)
         {
             UpdateNowMainWindowStatus();
-            return FolderPath.Text(row, col, Tree);
+            return FolderPath.Text(index, Tree);
         }
 
-        internal bool ContainFile(string fileName, int row, int col)
+        internal bool ContainFile(string fileName, int index)
         {
-            return FileList.Contains(fileName, row, col, Tree);
+            return FileList.Contains(fileName, index, Tree);
         }
 
-        internal bool ContainFolder(string folderName, int row, int col)
+        internal bool ContainFolder(string folderName, int index)
         {
-            return FileList.Contains(folderName, row, col, Tree);
+            return FileList.Contains(folderName, index, Tree);
         }
 
-        internal void OpenFolder(string folderPath, int row, int col)
+        internal void OpenFolder(string folderPath)
         {
-            MainWindow.OpenFolder(folderPath, row, col);
+            MainWindow.OpenFolder(folderPath);
         }
 
         private void UpdateNowMainWindowStatus()
