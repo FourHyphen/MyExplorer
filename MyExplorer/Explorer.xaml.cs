@@ -16,32 +16,13 @@ using System.Windows.Shapes;
 
 namespace MyExplorer
 {
-    public partial class Explorer : UserControl, INotifyPropertyChanged
+    public partial class Explorer : UserControl
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public void NotifyPropertyChanged(string name)
-        {
-            var e = new PropertyChangedEventArgs(name);
-            PropertyChanged?.Invoke(this, e);
-        }
+        public ExplorerData Data { get; private set; } = null;
 
         public int CanvasWidth { get; private set; }
 
         public int CanvasHeight { get; private set; }
-
-        public string FolderPath { get; set; } = "";
-
-        private List<string> _FileList = null;
-        public List<string> FileList
-        {
-            get => _FileList;
-            set
-            {
-                _FileList = value;
-                NotifyPropertyChanged(nameof(FileList));
-            }
-        }
 
         public Explorer(string folderPath, int index)
         {
@@ -51,31 +32,9 @@ namespace MyExplorer
 
         private void Init(string folderPath, int index)
         {
+            Data = new ExplorerData(folderPath);
             DataContext = this;
-            InitFolderInfo(folderPath);
             SetElementsName(index);
-        }
-
-        private void InitFolderInfo(string folderPath)
-        {
-            FolderPath = folderPath;
-            InitFileList(folderPath);
-        }
-
-        private void InitFileList(string folderPath)
-        {
-            FileList = new List<string>();
-            AddFiles(folderPath, System.IO.Directory.GetDirectories);
-            AddFiles(folderPath, System.IO.Directory.GetFiles);
-        }
-
-        private void AddFiles(string folderPath, Func<string, string[]> func)
-        {
-            string[] files = func(folderPath);
-            foreach (string file in files)
-            {
-                FileList.Add(System.IO.Path.GetFileName(file));
-            }
         }
 
         private void SetElementsName(int index)

@@ -10,10 +10,10 @@
                 Width="{Binding CanvasWidth}"
                 Height="{Binding CanvasHeight}">
         <TextBox x:Name="Folder"
-                 Text="{Binding FolderPath}"
+                 Text="{Binding Data.FolderPath}"
                  ScrollViewer.HorizontalScrollBarVisibility="Auto"/>
         <ListBox x:Name="FolderFileList"
-                 ItemsSource="{Binding FileList}"
+                 ItemsSource="{Binding Data.FileList}"
                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
                  ScrollViewer.VerticalScrollBarVisibility="Auto"/>
     </StackPanel>
