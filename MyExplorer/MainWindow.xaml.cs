@@ -17,6 +17,8 @@ namespace MyExplorer
 {
     public partial class MainWindow : Window
     {
+        private ExplorerList Explorers { get; set; } = new ExplorerList();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -31,69 +33,11 @@ namespace MyExplorer
             }
         }
 
-        private List<Explorer> Explorers { get; set; } = new List<Explorer>();
-
         private void OpenFolder(string folderPath)
         {
-            Explorer explorer = new Explorer(folderPath, Explorers.Count);
-            Explorers.Add(explorer);
-            DisplayExplorers();
-            SetExplorersPosition();
-        }
-
-        private void DisplayExplorers()
-        {
-            FoldersArea.Children.Clear();
-            foreach (Explorer explorer in Explorers)
-            {
-                FoldersArea.Children.Add(explorer);
-            }
-        }
-
-        private void SetExplorersPosition()
-        {
-            int width = (int)ActualWidth;
-            int height = (int)ActualHeight - 50;    // 50: 経験則
-            int scrollBar = 10;                     // 10: 経験則
-            if (Explorers.Count == 2)
-            {
-                width = width / 2 - scrollBar;
-            }
-            else if (Explorers.Count >= 3)
-            {
-                width = width / 2 - scrollBar;
-                height = height / 2 - scrollBar;
-            }
-
-            foreach (Explorer explorer in Explorers)
-            {
-                explorer.SetWidth(width);
-                explorer.SetHeight(height);
-            }
-
-            Explorers[0].CanvasLeft = 0;
-            Explorers[0].CanvasTop = 0;
-            if (Explorers.Count >= 2)
-            {
-                Explorers[1].CanvasLeft = Explorers[0].CanvasWidth + 1;
-                Explorers[1].CanvasTop = 0;
-            }
-            if (Explorers.Count >= 3)
-            {
-                Explorers[2].CanvasLeft = 0;
-                Explorers[2].CanvasTop = Explorers[0].CanvasHeight + 1;
-            }
-            if (Explorers.Count >= 4)
-            {
-                Explorers[3].CanvasLeft = Explorers[0].CanvasWidth + 1;
-                Explorers[3].CanvasTop = Explorers[0].CanvasHeight + 1;
-            }
-
-            for (int i = 0; i < Explorers.Count; i++)
-            {
-                Canvas.SetLeft(Explorers[i], Explorers[i].CanvasLeft);
-                Canvas.SetTop(Explorers[i], Explorers[i].CanvasTop);
-            }
+            Explorers.Add(folderPath);
+            Explorers.SetPosition(this);
+            Explorers.Display(FoldersArea.Children);
         }
     }
 }

@@ -20,9 +20,9 @@ namespace MyExplorer
     {
         public ExplorerData Data { get; private set; } = null;
 
-        public int CanvasLeft { get; set; }
+        public int CanvasLeft { get; private set; }
 
-        public int CanvasTop { get; set; }
+        public int CanvasTop { get; private set; }
 
         public int CanvasWidth { get; private set; }
 
@@ -47,6 +47,18 @@ namespace MyExplorer
             FolderArea.Name = "FolderArea" + unique;
             Folder.Name = "Folder" + unique;
             FolderFileList.Name = "FileList" + unique;
+        }
+
+        public void SetLeft(int left)
+        {
+            CanvasLeft = left;
+            Canvas.SetLeft(this, left);
+        }
+
+        public void SetTop(int top)
+        {
+            CanvasTop = top;
+            Canvas.SetTop(this, top);
         }
 
         public void SetWidth(int width)
