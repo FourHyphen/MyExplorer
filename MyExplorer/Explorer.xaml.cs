@@ -20,6 +20,10 @@ namespace MyExplorer
     {
         public ExplorerData Data { get; private set; } = null;
 
+        public int CanvasLeft { get; set; }
+
+        public int CanvasTop { get; set; }
+
         public int CanvasWidth { get; private set; }
 
         public int CanvasHeight { get; private set; }

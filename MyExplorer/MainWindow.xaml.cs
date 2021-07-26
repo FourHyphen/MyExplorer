@@ -71,28 +71,28 @@ namespace MyExplorer
                 explorer.SetHeight(height);
             }
 
-            Canvas.SetLeft(Explorers[0], 0);
-            Canvas.SetTop(Explorers[0], 0);
-            if (Explorers.Count == 2)
+            Explorers[0].CanvasLeft = 0;
+            Explorers[0].CanvasTop = 0;
+            if (Explorers.Count >= 2)
             {
-                Canvas.SetLeft(Explorers[1], Explorers[0].CanvasWidth + 1);
-                Canvas.SetTop(Explorers[1], 0);
+                Explorers[1].CanvasLeft = Explorers[0].CanvasWidth + 1;
+                Explorers[1].CanvasTop = 0;
             }
-            else if (Explorers.Count == 3)
+            if (Explorers.Count >= 3)
             {
-                Canvas.SetLeft(Explorers[1], Explorers[0].CanvasWidth + 1);
-                Canvas.SetTop(Explorers[1], 0);
-                Canvas.SetLeft(Explorers[2], 0);
-                Canvas.SetTop(Explorers[2], Explorers[0].CanvasHeight + 1);
+                Explorers[2].CanvasLeft = 0;
+                Explorers[2].CanvasTop = Explorers[0].CanvasHeight + 1;
             }
-            else if (Explorers.Count == 4)
+            if (Explorers.Count >= 4)
             {
-                //Explorers[1].CanvasLeft = Explorers[0].CanvasWidth + 1;
-                //Explorers[1].CanvasTop = 0;
-                //Explorers[2].CanvasLeft = 0;
-                //Explorers[2].CanvasTop = Explorers[0].CanvasHeight + 1;
-                //Explorers[3].CanvasLeft = Explorers[0].CanvasWidth + 1;
-                //Explorers[3].CanvasTop = Explorers[0].CanvasHeight + 1;
+                Explorers[3].CanvasLeft = Explorers[0].CanvasWidth + 1;
+                Explorers[3].CanvasTop = Explorers[0].CanvasHeight + 1;
+            }
+
+            for (int i = 0; i < Explorers.Count; i++)
+            {
+                Canvas.SetLeft(Explorers[i], Explorers[i].CanvasLeft);
+                Canvas.SetTop(Explorers[i], Explorers[i].CanvasTop);
             }
         }
     }
