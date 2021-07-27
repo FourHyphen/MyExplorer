@@ -39,5 +39,15 @@ namespace MyExplorer
             Explorers.SetPosition(this);
             Explorers.Display(FoldersArea.Children);
         }
+
+        private void MainWindowKeyDown(object sender, KeyEventArgs e)
+        {
+            InputKey(e.Key, e.KeyboardDevice.Modifiers);
+        }
+
+        private void InputKey(Key key, ModifierKeys modifier)
+        {
+
+        }
     }
 }

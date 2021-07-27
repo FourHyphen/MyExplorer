@@ -2,6 +2,7 @@
 using RM.Friendly.WPFStandardControls;
 using System;
 using System.Collections.Generic;
+using System.Windows.Input;
 
 namespace TestMyExplorer
 {
@@ -42,6 +43,11 @@ namespace TestMyExplorer
         internal void OpenFolder(string folderPath)
         {
             MainWindow.OpenFolder(folderPath);
+        }
+
+        internal void EmurateKey(Key key, ModifierKeys modifier)
+        {
+            MainWindow.InputKey(key, modifier);
         }
 
         private void UpdateNowMainWindowStatus()

@@ -69,5 +69,32 @@ namespace TestMyExplorer
             Assert.IsTrue(Driver.ContainFile("text22.txt", 1));
             Assert.IsTrue(Driver.ContainFolder("folder02", 1));
         }
+
+        [TestMethod]
+        public void MoveFolderPathByKey()
+        {
+            // Alt + 左右 による現在フォルダの移動
+            System.Windows.Input.ModifierKeys altKey = System.Windows.Input.ModifierKeys.Alt;
+
+            string folderPath = Common.GetFilePathOfDependentEnvironment(@".\TestData\Folder1");
+            Driver.OpenFolder(folderPath);
+            Driver.EmurateKey(System.Windows.Input.Key.Left, altKey);
+
+            Assert.IsFalse(Driver.GetFolderPath(0).Contains(@"\TestData\Folder1"));
+            Assert.IsTrue(Driver.GetFolderPath(0).Contains(@"\TestData"));
+            Assert.IsTrue(Driver.ContainFolder("Folder1", 0));
+            Assert.IsTrue(Driver.ContainFolder("Folder2", 0));
+
+            Driver.EmurateKey(System.Windows.Input.Key.Left, altKey);
+            Assert.IsFalse(Driver.GetFolderPath(0).Contains(@"\TestData"));
+            Assert.IsTrue(Driver.ContainFolder("TestData", 0));
+
+            Driver.EmurateKey(System.Windows.Input.Key.Right, altKey);
+            Assert.IsFalse(Driver.GetFolderPath(0).Contains(@"\TestData\Folder1"));
+            Assert.IsTrue(Driver.GetFolderPath(0).Contains(@"\TestData"));
+
+            Driver.EmurateKey(System.Windows.Input.Key.Right, altKey);
+            Assert.IsTrue(Driver.GetFolderPath(0).Contains(@"\TestData\Folder1"));
+        }
     }
 }
