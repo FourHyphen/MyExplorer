@@ -47,7 +47,19 @@ namespace TestMyExplorer
 
         internal void EmurateKey(Key key, ModifierKeys modifier)
         {
-            MainWindow.InputKey(key, modifier);
+            if (modifier == ModifierKeys.None)
+            {
+                MainWindow.InputKey(key, Key.None, modifier);
+            }
+            else
+            {
+                MainWindow.InputKey(Key.None, key, modifier);
+            }
+        }
+
+        internal void FocusFile(string fileName)
+        {
+            MainWindow.FocusFile(fileName);
         }
 
         private void UpdateNowMainWindowStatus()

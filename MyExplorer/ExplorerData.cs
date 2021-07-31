@@ -12,12 +12,12 @@ namespace MyExplorer
 
         public ExplorerData(string folderPath)
         {
-            FolderPath = folderPath;
-            InitFileList(folderPath);
+            SetFolderInfo(folderPath);
         }
 
-        private void InitFileList(string folderPath)
+        private void SetFolderInfo(string folderPath)
         {
+            FolderPath = folderPath;
             FileList = new List<string>();
             AddFiles(folderPath, System.IO.Directory.GetDirectories);
             AddFiles(folderPath, System.IO.Directory.GetFiles);
@@ -29,6 +29,21 @@ namespace MyExplorer
             foreach (string file in files)
             {
                 FileList.Add(System.IO.Path.GetFileName(file));
+            }
+        }
+
+        public void MoveFolderOneUp()
+        {
+            SetFolderInfo(System.IO.Path.GetDirectoryName(FolderPath));
+        }
+
+        public void IntoFolder(string selectedName)
+        {
+            string selectedPath = System.IO.Path.Combine(FolderPath, selectedName);
+            bool isDirectory = System.IO.File.GetAttributes(selectedPath).HasFlag(System.IO.FileAttributes.Directory);
+            if (isDirectory)
+            {
+                SetFolderInfo(selectedPath);
             }
         }
     }

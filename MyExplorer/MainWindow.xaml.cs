@@ -42,12 +42,25 @@ namespace MyExplorer
 
         private void MainWindowKeyDown(object sender, KeyEventArgs e)
         {
-            InputKey(e.Key, e.KeyboardDevice.Modifiers);
+            InputKey(e.Key, e.SystemKey, e.KeyboardDevice.Modifiers);
         }
 
-        private void InputKey(Key key, ModifierKeys modifier)
+        private void InputKey(Key key, Key systemKey, ModifierKeys modifier)
         {
+            Keys.KeyEventType keyEventType = Keys.ToKeyEventType(key, systemKey, modifier);
+            if (keyEventType != Keys.KeyEventType.Else)
+            {
+                Explorers.DoKeyEvent(keyEventType);
+            }
+        }
 
+        /// <summary>
+        /// テストでのみ使用
+        /// </summary>
+        /// <param name="fileName"></param>
+        private void FocusFile(string fileName)
+        {
+            Explorers.FocusFile(fileName);
         }
     }
 }

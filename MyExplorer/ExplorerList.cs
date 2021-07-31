@@ -57,6 +57,28 @@ namespace MyExplorer
             }
         }
 
+        public void DoKeyEvent(Keys.KeyEventType keyEventType)
+        {
+            // どのフォルダにフォーカスが当たっているかを特定
+            Explorer explorer = GetNowFocusing();
+
+            // 現在フォーカス中のフォルダに対してKeyEventを発行
+            if (explorer != null)
+            {
+                explorer.DoKeyEvent(keyEventType);
+            }
+        }
+
+        private Explorer GetNowFocusing()
+        {
+            if (Explorers.Count == 1)
+            {
+                return Explorers[0];
+            }
+
+            return Explorers.Find(t => t.NowFocusing());
+        }
+
         public void Display(UIElementCollection collection)
         {
             collection.Clear();
@@ -64,6 +86,16 @@ namespace MyExplorer
             {
                 collection.Add(explorer);
             }
+        }
+
+        /// <summary>
+        /// テストで使用
+        /// </summary>
+        /// <param name="fileName"></param>
+        public void FocusFile(string fileName)
+        {
+            Explorer explorer = GetNowFocusing();
+            explorer.FocusFile(fileName);
         }
     }
 }

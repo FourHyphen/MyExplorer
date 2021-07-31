@@ -16,9 +16,11 @@ using System.Windows.Shapes;
 
 namespace MyExplorer
 {
-    public partial class Explorer : UserControl
+    public partial class Explorer : UserControl, INotifyPropertyChanged
     {
-        public ExplorerData Data { get; private set; } = null;
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public ExplorerData Data { get; private set; }
 
         public int CanvasLeft { get; private set; }
 
@@ -75,6 +77,110 @@ namespace MyExplorer
             Folder.Height = 40;
             FolderFileList.Height = height - Folder.Height;
             CanvasHeight = height;
+        }
+
+        public bool NowFocusing()
+        {
+            foreach (UIElement elem in FolderArea.Children)
+            {
+                // TextBox は IsFocused() が true / false になる
+                if (elem.IsFocused)
+                {
+                    return true;
+                }
+
+                // ListBox の判定
+                //if (elem.GetType().FullName.Contains("ListBox"))
+                if (elem is ListBox)
+                {
+                    if (IsFocusedListBox((ListBox)elem))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private bool IsFocusedListBox(ListBox listBox)
+        {
+            // ListBox 自体は focus を持たないため、中の ListBoxItem が focus を持っているかを判定する
+            // 参考: https://threeshark3.com/binding-listbox-focus/
+            for (int i = 0; i < listBox.Items.Count; i++)
+            {
+                var obj = listBox.ItemContainerGenerator.ContainerFromIndex(i);
+                if (obj is ListBoxItem target)
+                {
+                    if (target.IsFocused)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public void DoKeyEvent(Keys.KeyEventType keyEventType)
+        {
+            if (keyEventType == Keys.KeyEventType.FolderBack)
+            {
+                BackFolder();
+            }
+            else if (keyEventType == Keys.KeyEventType.FolderForward)
+            {
+                ForwardFolder();
+            }
+
+            NotifyExplorerDataChanged();
+        }
+
+        private void BackFolder()
+        {
+            Data.MoveFolderOneUp();
+        }
+
+        private void ForwardFolder()
+        {
+            string selectedName = GetFolderFileListSelected();
+            if (selectedName != "")
+            {
+                Data.IntoFolder(selectedName);
+            }
+        }
+
+        private string GetFolderFileListSelected()
+        {
+            object selected = FolderFileList.SelectedItem;
+            if (selected != null)
+            {
+                return selected.ToString();
+            }
+
+            return "";
+        }
+
+        private void NotifyExplorerDataChanged()
+        {
+            NotifyPropertyChanged(nameof(Data));
+        }
+
+        public void NotifyPropertyChanged(string name)
+        {
+            var e = new PropertyChangedEventArgs(name);
+            PropertyChanged?.Invoke(this, e);
+        }
+
+        /// <summary>
+        /// テストでのみ使用
+        /// </summary>
+        /// <param name="fileName"></param>
+        public void FocusFile(string fileName)
+        {
+            int index = Data.FileList.FindIndex(f => f == fileName);
+            FolderFileList.SelectedIndex = index;
+            FolderFileList.Focus();
         }
     }
 }

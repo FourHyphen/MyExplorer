@@ -73,28 +73,38 @@ namespace TestMyExplorer
         [TestMethod]
         public void MoveFolderPathByKey()
         {
-            // Alt + 左右 による現在フォルダの移動
-            System.Windows.Input.ModifierKeys altKey = System.Windows.Input.ModifierKeys.Alt;
+            // 左右キーによる現在フォルダの移動
+            System.Windows.Input.ModifierKeys modifierNone = System.Windows.Input.ModifierKeys.None;
 
             string folderPath = Common.GetFilePathOfDependentEnvironment(@".\TestData\Folder1");
             Driver.OpenFolder(folderPath);
-            Driver.EmurateKey(System.Windows.Input.Key.Left, altKey);
+            Driver.FocusFile("text11.txt");
 
+            // 1 階層上に上る場合
+            Driver.EmurateKey(System.Windows.Input.Key.Left, modifierNone);
             Assert.IsFalse(Driver.GetFolderPath(0).Contains(@"\TestData\Folder1"));
-            Assert.IsTrue(Driver.GetFolderPath(0).Contains(@"\TestData"));
             Assert.IsTrue(Driver.ContainFolder("Folder1", 0));
             Assert.IsTrue(Driver.ContainFolder("Folder2", 0));
 
-            Driver.EmurateKey(System.Windows.Input.Key.Left, altKey);
+            Driver.EmurateKey(System.Windows.Input.Key.Left, modifierNone);
             Assert.IsFalse(Driver.GetFolderPath(0).Contains(@"\TestData"));
             Assert.IsTrue(Driver.ContainFolder("TestData", 0));
 
-            Driver.EmurateKey(System.Windows.Input.Key.Right, altKey);
-            Assert.IsFalse(Driver.GetFolderPath(0).Contains(@"\TestData\Folder1"));
-            Assert.IsTrue(Driver.GetFolderPath(0).Contains(@"\TestData"));
+            // フォルダを選択している場合のみそのフォルダを開く(中に入る)
+            Driver.FocusFile("TestFeature.cs");
+            Driver.EmurateKey(System.Windows.Input.Key.Right, modifierNone);
+            Assert.IsFalse(Driver.GetFolderPath(0).Contains(@"\TestData"));
+            Assert.IsTrue(Driver.ContainFolder("TestData", 0));
 
-            Driver.EmurateKey(System.Windows.Input.Key.Right, altKey);
-            Assert.IsTrue(Driver.GetFolderPath(0).Contains(@"\TestData\Folder1"));
+            Driver.FocusFile("TestData");
+            Driver.EmurateKey(System.Windows.Input.Key.Right, modifierNone);
+            Assert.IsTrue(Driver.GetFolderPath(0).Contains(@"\TestData"));
+            Assert.IsTrue(Driver.ContainFolder("Folder1", 0));
+
+            Driver.FocusFile("Folder2");
+            Driver.EmurateKey(System.Windows.Input.Key.Right, modifierNone);
+            Assert.IsTrue(Driver.GetFolderPath(0).Contains(@"\TestData\Folder2"));
+            Assert.IsTrue(Driver.ContainFolder("folder02", 0));
         }
     }
 }
