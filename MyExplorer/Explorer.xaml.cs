@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -22,118 +23,101 @@ namespace MyExplorer
 
         public ExplorerData Data { get; private set; }
 
-        public int CanvasLeft { get; private set; }
+        public object SelectedItem { get; private set; }
 
-        public int CanvasTop { get; private set; }
+        public int FolderAreaWidth { get; private set; }
 
-        public int CanvasWidth { get; private set; }
+        public int FolderAreaHeight { get; private set; }
 
-        public int CanvasHeight { get; private set; }
+        public int FolderPathAreaWidth { get; private set; }
 
-        public Explorer(string folderPath, int index)
+        public int FolderPathAreaHeight { get; private set; }
+
+        public int FolderFileListAreaWidth { get; private set; }
+
+        public int FolderFileListAreaHeight { get; private set; }
+
+        public Explorer(string folderPath)
         {
             InitializeComponent();
-            Init(folderPath, index);
+            Init(folderPath);
         }
 
-        private void Init(string folderPath, int index)
+        private void Init(string folderPath)
         {
             Data = new ExplorerData(folderPath);
             DataContext = this;
-            SetElementsName(index);
         }
 
-        private void SetElementsName(int index)
+        public void SetPosition(MainWindow main)
         {
-            string unique = index.ToString();
-            FolderArea.Name = "FolderArea" + unique;
-            Folder.Name = "Folder" + unique;
-            FolderFileList.Name = "FileList" + unique;
+            int scrollBar = 10;                     // 10: 経験則
+            int width = (int)main.ActualWidth - scrollBar;
+            int height = (int)main.ActualHeight - scrollBar - 50;    // 50: 経験則
+
+            SetWidth(width);
+            SetHeight(height);
         }
 
-        public void SetLeft(int left)
+        private void SetWidth(int width)
         {
-            CanvasLeft = left;
-            Canvas.SetLeft(this, left);
+            FolderPathAreaWidth = width;
+            FolderFileListAreaWidth = width;
+            FolderAreaWidth = width;
         }
 
-        public void SetTop(int top)
+        private void SetHeight(int height)
         {
-            CanvasTop = top;
-            Canvas.SetTop(this, top);
+            FolderPathAreaHeight = 40;
+            FolderFileListAreaHeight = height - FolderPathAreaHeight;
+            FolderAreaHeight = height;
         }
 
-        public void SetWidth(int width)
+        public void Display(UIElementCollection collection)
         {
-            FolderArea.Width = width;
-            Folder.Width = width;
-            FolderFileList.Width = width;
-            CanvasWidth = width;
-        }
-
-        public void SetHeight(int height)
-        {
-            FolderArea.Height = height;
-            Folder.Height = 40;
-            FolderFileList.Height = height - Folder.Height;
-            CanvasHeight = height;
-        }
-
-        public bool NowFocusing()
-        {
-            foreach (UIElement elem in FolderArea.Children)
-            {
-                // TextBox は IsFocused() が true / false になる
-                if (elem.IsFocused)
-                {
-                    return true;
-                }
-
-                // ListBox の判定
-                //if (elem.GetType().FullName.Contains("ListBox"))
-                if (elem is ListBox)
-                {
-                    if (IsFocusedListBox((ListBox)elem))
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        private bool IsFocusedListBox(ListBox listBox)
-        {
-            // ListBox 自体は focus を持たないため、中の ListBoxItem が focus を持っているかを判定する
-            // 参考: https://threeshark3.com/binding-listbox-focus/
-            for (int i = 0; i < listBox.Items.Count; i++)
-            {
-                var obj = listBox.ItemContainerGenerator.ContainerFromIndex(i);
-                if (obj is ListBoxItem target)
-                {
-                    if (target.IsFocused)
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
+            collection.Clear();
+            collection.Add(this);
         }
 
         public void DoKeyEvent(Keys.KeyEventType keyEventType)
         {
-            if (keyEventType == Keys.KeyEventType.FolderBack)
+            if (IsItemInFileList("IsFocused"))
             {
-                BackFolder();
-            }
-            else if (keyEventType == Keys.KeyEventType.FolderForward)
-            {
-                ForwardFolder();
+                if (keyEventType == Keys.KeyEventType.FolderBack)
+                {
+                    BackFolder();
+                }
+                else if (keyEventType == Keys.KeyEventType.FolderForward)
+                {
+                    ForwardFolder();
+                }
             }
 
-            NotifyExplorerDataChanged();
+            NotifyDataChanged();
+        }
+
+        private bool IsItemInFileList(string itemPropertyName)
+        {
+            // 参考: https://threeshark3.com/binding-listbox-focus/
+            for (int i = 0; i < FolderFileList.Items.Count; i++)
+            {
+                var obj = GetItemInFolderFileList(i);
+                if (obj is ListViewItem target)
+                {
+                    PropertyInfo pi = typeof(ListViewItem).GetProperty(itemPropertyName);
+                    if ((bool)pi.GetValue(target))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private object GetItemInFolderFileList(int index)
+        {
+            return FolderFileList.ItemContainerGenerator.ContainerFromIndex(index);
         }
 
         private void BackFolder()
@@ -153,17 +137,96 @@ namespace MyExplorer
         private string GetFolderFileListSelected()
         {
             object selected = FolderFileList.SelectedItem;
-            if (selected != null)
-            {
-                return selected.ToString();
-            }
-
-            return "";
+            return selected != null ? selected.ToString() : "";
         }
 
-        private void NotifyExplorerDataChanged()
+        public void DoMouseEvent(dynamic obj)
+        {
+            if (DoMouseDownFileList(obj))
+            {
+                DoMouseEventFileList();
+            }
+        }
+
+        private bool DoMouseDownFileList(dynamic obj)
+        {
+            if (obj is ScrollViewer sv)
+            {
+                // Item が選択されている場合は false 判定になる
+                return (sv.TemplatedParent is ListView);
+            }
+
+            return false;
+        }
+
+        private void DoMouseEventFileList()
+        {
+            if (IsItemInFileList("IsFocused"))
+            {
+                // Item の Selected を解除
+                SelectedItem = null;
+            }
+            else
+            {
+                // FileList にフォーカスを当てる
+                SetFocusFileList();
+            }
+
+            NotifySelectedItemChanged();
+        }
+
+        private void SetFocusFileList()
+        {
+            if (SelectedItem == null)
+            {
+                // 真に何も選択されていない場合、FileList にキーボードフォーカスと論理フォーカスを当てる
+                FolderFileList.Focus();
+                Keyboard.Focus(FolderFileList);
+            }
+
+            if (SelectedItem is string itemString)
+            {
+                // 選択されている状態でフォーカスが ListView から外れ、再度 ListView にフォーカス当たった場合にここを通る
+                // この場合はファイルにフォーカスを当てなおす
+                ListViewItem item = GetListViewItem(itemString);
+                if (item != null)
+                {
+                    SetFocusFile(item);
+                }
+            }
+        }
+
+        private ListViewItem GetListViewItem(string content)
+        {
+            for (int i = 0; i < FolderFileList.Items.Count; i++)
+            {
+                var obj = GetItemInFolderFileList(i);
+                if (obj is ListViewItem target)
+                {
+                    if ((string)target.Content == content)
+                    {
+                        return target;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        private void SetFocusFile(ListViewItem selected)
+        {
+            Keyboard.Focus(selected);
+            selected.Focus();
+        }
+
+        private void NotifyDataChanged()
         {
             NotifyPropertyChanged(nameof(Data));
+        }
+
+        private void NotifySelectedItemChanged()
+        {
+            NotifyPropertyChanged(nameof(SelectedItem));
         }
 
         public void NotifyPropertyChanged(string name)
@@ -173,14 +236,25 @@ namespace MyExplorer
         }
 
         /// <summary>
-        /// テストでのみ使用
+        /// テストで使用
+        /// </summary>
+        public void FocusFolderPathArea()
+        {
+            FolderPath.Focus();
+            Keyboard.Focus(FolderPath);
+        }
+
+        /// <summary>
+        /// テストで使用
         /// </summary>
         /// <param name="fileName"></param>
         public void FocusFile(string fileName)
         {
-            int index = Data.FileList.FindIndex(f => f == fileName);
-            FolderFileList.SelectedIndex = index;
-            FolderFileList.Focus();
+            ListViewItem selected = GetListViewItem(fileName);
+            if (selected != null)
+            {
+                SetFocusFile(selected);
+            }
         }
     }
 }

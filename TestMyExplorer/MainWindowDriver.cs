@@ -12,32 +12,27 @@ namespace TestMyExplorer
 
         private IWPFDependencyObjectCollection<System.Windows.DependencyObject> Tree { get; set; }
 
-        private TextBoxAdapter FolderPath { get; set; }
+        private FolderPathAdapter FolderPath { get; set; }
 
-        private ListBoxAdapter FileList { get; set; }
+        private FileListAdapter FileList { get; set; }
 
         public MainWindowDriver(dynamic mainWindow)
         {
             MainWindow = mainWindow;
-            FolderPath = new TextBoxAdapter("Folder");
-            FileList = new ListBoxAdapter("FileList");
+            FolderPath = new FolderPathAdapter("FolderPath");
+            FileList = new FileListAdapter("FolderFileList");
             Tree = new WindowControl(mainWindow).LogicalTree();
         }
 
-        public string GetFolderPath(int index)
+        public string GetFolderPath()
         {
             UpdateNowMainWindowStatus();
-            return FolderPath.Text(index, Tree);
+            return FolderPath.Text(Tree);
         }
 
-        internal bool ContainFile(string fileName, int index)
+        internal bool ContainFile(string fileName)
         {
-            return FileList.Contains(fileName, index, Tree);
-        }
-
-        internal bool ContainFolder(string folderName, int index)
-        {
-            return FileList.Contains(folderName, index, Tree);
+            return FileList.Contains(fileName, Tree);
         }
 
         internal void OpenFolder(string folderPath)
@@ -60,6 +55,11 @@ namespace TestMyExplorer
         internal void FocusFile(string fileName)
         {
             MainWindow.FocusFile(fileName);
+        }
+
+        internal void FocusFolderPathArea()
+        {
+            MainWindow.FocusFolderPathArea();
         }
 
         private void UpdateNowMainWindowStatus()

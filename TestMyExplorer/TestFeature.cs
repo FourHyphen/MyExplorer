@@ -52,59 +52,44 @@ namespace TestMyExplorer
         }
 
         [TestMethod]
-        public void OpenTwoFolders()
+        public void OpenFolder()
         {
             string folderPath = Common.GetFilePathOfDependentEnvironment(@".\TestData\Folder1");
             Driver.OpenFolder(folderPath);
+            Assert.IsTrue(Driver.GetFolderPath().Contains(@"\TestData\Folder1"));
+            Assert.IsTrue(Driver.ContainFile("folder01"));
+            Assert.IsTrue(Driver.ContainFile("text11.txt"));
+            Assert.IsTrue(Driver.ContainFile("text12.txt"));
+
             string folderPath2 = Common.GetFilePathOfDependentEnvironment(@".\TestData\Folder2");
             Driver.OpenFolder(folderPath2);
 
-            Assert.IsTrue(Driver.GetFolderPath(0).Contains(@"\TestData\Folder1"));
-            Assert.IsTrue(Driver.ContainFile("text11.txt", 0));
-            Assert.IsTrue(Driver.ContainFile("text12.txt", 0));
-            Assert.IsTrue(Driver.ContainFolder("folder01", 0));
-
-            Assert.IsTrue(Driver.GetFolderPath(1).Contains(@"\TestData\Folder2"));
-            Assert.IsTrue(Driver.ContainFile("text21.txt", 1));
-            Assert.IsTrue(Driver.ContainFile("text22.txt", 1));
-            Assert.IsTrue(Driver.ContainFolder("folder02", 1));
+            Assert.IsTrue(Driver.GetFolderPath().Contains(@"\TestData\Folder2"));
+            Assert.IsTrue(Driver.ContainFile("folder02"));
+            Assert.IsTrue(Driver.ContainFile("text21.txt"));
+            Assert.IsTrue(Driver.ContainFile("text22.txt"));
         }
 
         [TestMethod]
-        public void MoveFolderPathByKey()
+        public void BackFolderPathByKey()
         {
-            // 左右キーによる現在フォルダの移動
+            // 左キーによる現在フォルダから 1 階層上への移動
             System.Windows.Input.ModifierKeys modifierNone = System.Windows.Input.ModifierKeys.None;
 
             string folderPath = Common.GetFilePathOfDependentEnvironment(@".\TestData\Folder1");
             Driver.OpenFolder(folderPath);
+
+            // フォーカスが TextBox に当たっている場合はフォルダ移動しない
+            Driver.FocusFolderPathArea();
+            Driver.EmurateKey(System.Windows.Input.Key.Left, modifierNone);
+            Assert.IsTrue(Driver.GetFolderPath().Contains(@"\TestData\Folder1"));
+
+            // 1 階層上に上る
             Driver.FocusFile("text11.txt");
-
-            // 1 階層上に上る場合
             Driver.EmurateKey(System.Windows.Input.Key.Left, modifierNone);
-            Assert.IsFalse(Driver.GetFolderPath(0).Contains(@"\TestData\Folder1"));
-            Assert.IsTrue(Driver.ContainFolder("Folder1", 0));
-            Assert.IsTrue(Driver.ContainFolder("Folder2", 0));
-
-            Driver.EmurateKey(System.Windows.Input.Key.Left, modifierNone);
-            Assert.IsFalse(Driver.GetFolderPath(0).Contains(@"\TestData"));
-            Assert.IsTrue(Driver.ContainFolder("TestData", 0));
-
-            // フォルダを選択している場合のみそのフォルダを開く(中に入る)
-            Driver.FocusFile("TestFeature.cs");
-            Driver.EmurateKey(System.Windows.Input.Key.Right, modifierNone);
-            Assert.IsFalse(Driver.GetFolderPath(0).Contains(@"\TestData"));
-            Assert.IsTrue(Driver.ContainFolder("TestData", 0));
-
-            Driver.FocusFile("TestData");
-            Driver.EmurateKey(System.Windows.Input.Key.Right, modifierNone);
-            Assert.IsTrue(Driver.GetFolderPath(0).Contains(@"\TestData"));
-            Assert.IsTrue(Driver.ContainFolder("Folder1", 0));
-
-            Driver.FocusFile("Folder2");
-            Driver.EmurateKey(System.Windows.Input.Key.Right, modifierNone);
-            Assert.IsTrue(Driver.GetFolderPath(0).Contains(@"\TestData\Folder2"));
-            Assert.IsTrue(Driver.ContainFolder("folder02", 0));
+            Assert.IsFalse(Driver.GetFolderPath().Contains(@"\TestData\Folder1"));
+            Assert.IsTrue(Driver.ContainFile("Folder1"));
+            Assert.IsTrue(Driver.ContainFile("Folder2"));
         }
     }
 }

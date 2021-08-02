@@ -17,7 +17,7 @@ namespace MyExplorer
 {
     public partial class MainWindow : Window
     {
-        private ExplorerList Explorers { get; set; } = new ExplorerList();
+        private Explorer Explorer { get; set; } = null;
 
         public MainWindow()
         {
@@ -35,9 +35,9 @@ namespace MyExplorer
 
         private void OpenFolder(string folderPath)
         {
-            Explorers.Add(folderPath);
-            Explorers.SetPosition(this);
-            Explorers.Display(FoldersArea.Children);
+            Explorer = new Explorer(folderPath);
+            Explorer.SetPosition(this);
+            Explorer.Display(FoldersArea.Children);
         }
 
         private void MainWindowKeyDown(object sender, KeyEventArgs e)
@@ -50,8 +50,28 @@ namespace MyExplorer
             Keys.KeyEventType keyEventType = Keys.ToKeyEventType(key, systemKey, modifier);
             if (keyEventType != Keys.KeyEventType.Else)
             {
-                Explorers.DoKeyEvent(keyEventType);
+                Explorer.DoKeyEvent(keyEventType);
             }
+        }
+
+        private void MainWindowMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            MouseLeftButtonDownCore(e.GetPosition((UIElement)sender));
+        }
+
+        private void MouseLeftButtonDownCore(Point p)
+        {
+            HitTestResult result = VisualTreeHelper.HitTest(this, p);
+            dynamic obj = result.VisualHit;
+            Explorer.DoMouseEvent(obj);
+        }
+
+        /// <summary>
+        /// テストでのみ使用
+        /// </summary>
+        private void FocusFolderPathArea()
+        {
+            Explorer.FocusFolderPathArea();
         }
 
         /// <summary>
@@ -60,7 +80,7 @@ namespace MyExplorer
         /// <param name="fileName"></param>
         private void FocusFile(string fileName)
         {
-            Explorers.FocusFile(fileName);
+            Explorer.FocusFile(fileName);
         }
     }
 }
