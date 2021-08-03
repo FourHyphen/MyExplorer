@@ -91,5 +91,29 @@ namespace TestMyExplorer
             Assert.IsTrue(Driver.ContainFile("Folder1"));
             Assert.IsTrue(Driver.ContainFile("Folder2"));
         }
+
+        [TestMethod]
+        public void MoveFolderPathByInputPath()
+        {
+            // パス入力後のエンターキーによるフォルダ移動
+            string folderPath = Common.GetFilePathOfDependentEnvironment(@".\TestData\Folder1");
+            Driver.OpenFolder(folderPath);
+
+            // パス入力する＝フォーカスが TextBox に当たっている
+            string toPath = Common.GetFilePathOfDependentEnvironment(@".\TestData\Folder2");
+            Driver.FocusFolderPathArea();
+            Driver.SetFolderPathText(toPath);
+
+            // エンターキー
+            Driver.EmurateKey(System.Windows.Input.Key.Enter, System.Windows.Input.ModifierKeys.None);
+            Assert.IsTrue(Driver.GetFolderPath().Contains(@"\TestData\Folder2"));
+            Assert.IsTrue(Driver.ContainFile("text21.txt"));
+
+            // 存在しないフォルダへは移動せず、画面は変化しない
+            Driver.SetFolderPathText("NOT_EXIST");
+            Driver.EmurateKey(System.Windows.Input.Key.Enter, System.Windows.Input.ModifierKeys.None);
+            Assert.IsTrue(Driver.GetFolderPath().Contains(@"NOT_EXIST"));
+            Assert.IsTrue(Driver.ContainFile("text21.txt"));
+        }
     }
 }

@@ -256,5 +256,14 @@ namespace MyExplorer
                 SetFocusFile(selected);
             }
         }
+
+        /// <summary>
+        /// テストで使用
+        /// </summary>
+        /// <param name="str"></param>
+        public void SetFolderPathText(string str)
+        {
+            // TODO 実装
+        }
     }
 }

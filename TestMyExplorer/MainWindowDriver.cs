@@ -62,6 +62,11 @@ namespace TestMyExplorer
             MainWindow.FocusFolderPathArea();
         }
 
+        internal void SetFolderPathText(string str)
+        {
+            MainWindow.SetFolderPathText(str);
+        }
+
         private void UpdateNowMainWindowStatus()
         {
             Tree = new WindowControl(MainWindow).LogicalTree();    // 現在の画面状況を取得

@@ -82,5 +82,14 @@ namespace MyExplorer
         {
             Explorer.FocusFile(fileName);
         }
+
+        /// <summary>
+        /// テストでのみ使用
+        /// </summary>
+        /// <param name="str"></param>
+        private void SetFolderPathText(string str)
+        {
+            Explorer.SetFolderPathText(str);
+        }
     }
 }
