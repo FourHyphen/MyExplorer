@@ -40,6 +40,11 @@ namespace MyExplorer
         public void IntoFolder(string selectedName)
         {
             string selectedPath = System.IO.Path.Combine(FolderPath, selectedName);
+            if (!System.IO.Directory.Exists(selectedPath))
+            {
+                return;
+            }
+
             bool isDirectory = System.IO.File.GetAttributes(selectedPath).HasFlag(System.IO.FileAttributes.Directory);
             if (isDirectory)
             {
