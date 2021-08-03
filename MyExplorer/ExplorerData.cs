@@ -32,23 +32,31 @@ namespace MyExplorer
             }
         }
 
-        public void MoveFolderOneUp()
+        public void MoveFolderOneUp(out bool isStateChanged)
         {
             SetFolderInfo(System.IO.Path.GetDirectoryName(FolderPath));
+            isStateChanged = true;
         }
 
-        public void IntoFolder(string selectedName)
+        public void IntoFolder(string selectedName, out bool isStateChanged)
         {
             string selectedPath = System.IO.Path.Combine(FolderPath, selectedName);
-            if (!System.IO.Directory.Exists(selectedPath))
+            MoveFolder(selectedPath, out isStateChanged);
+        }
+
+        public void MoveFolder(string folderPath, out bool isStateChanged)
+        {
+            isStateChanged = false;
+            if (!System.IO.Directory.Exists(folderPath))
             {
                 return;
             }
 
-            bool isDirectory = System.IO.File.GetAttributes(selectedPath).HasFlag(System.IO.FileAttributes.Directory);
+            bool isDirectory = System.IO.File.GetAttributes(folderPath).HasFlag(System.IO.FileAttributes.Directory);
             if (isDirectory)
             {
-                SetFolderInfo(selectedPath);
+                SetFolderInfo(folderPath);
+                isStateChanged = true;
             }
         }
     }

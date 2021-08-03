@@ -12,6 +12,7 @@ namespace MyExplorer
         {
             FolderBack,
             FolderForward,
+            EnterKey,
             Else
         }
 
@@ -73,6 +74,10 @@ namespace MyExplorer
             else if (key == Key.Right)
             {
                 return KeyEventType.FolderForward;
+            }
+            else if (key == Key.Enter)
+            {
+                return KeyEventType.EnterKey;
             }
 
             return KeyEventType.Else;

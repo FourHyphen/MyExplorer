@@ -81,19 +81,30 @@ namespace MyExplorer
 
         public void DoKeyEvent(Keys.KeyEventType keyEventType)
         {
+            bool isStateChanged = false;
             if (IsItemInFileList("IsFocused"))
             {
                 if (keyEventType == Keys.KeyEventType.FolderBack)
                 {
-                    BackFolder();
+                    BackFolder(out isStateChanged);
                 }
                 else if (keyEventType == Keys.KeyEventType.FolderForward)
                 {
-                    ForwardFolder();
+                    ForwardFolder(out isStateChanged);
+                }
+            }
+            else if (FolderPath.IsFocused)
+            {
+                if (keyEventType == Keys.KeyEventType.EnterKey)
+                {
+                    MoveFolder(out isStateChanged);
                 }
             }
 
-            NotifyDataChanged();
+            if (isStateChanged)
+            {
+                NotifyDataChanged();
+            }
         }
 
         private bool IsItemInFileList(string itemPropertyName)
@@ -120,17 +131,19 @@ namespace MyExplorer
             return FolderFileList.ItemContainerGenerator.ContainerFromIndex(index);
         }
 
-        private void BackFolder()
+        private void BackFolder(out bool isStateChanged)
         {
-            Data.MoveFolderOneUp();
+            Data.MoveFolderOneUp(out isStateChanged);
         }
 
-        private void ForwardFolder()
+        private void ForwardFolder(out bool isStateChanged)
         {
+            isStateChanged = false;
+
             string selectedName = GetFolderFileListSelected();
             if (selectedName != "")
             {
-                Data.IntoFolder(selectedName);
+                Data.IntoFolder(selectedName, out isStateChanged);
             }
         }
 
@@ -138,6 +151,12 @@ namespace MyExplorer
         {
             object selected = FolderFileList.SelectedItem;
             return selected != null ? selected.ToString() : "";
+        }
+
+        private void MoveFolder(out bool isStateChanged)
+        {
+            string input = FolderPath.Text;
+            Data.MoveFolder(input, out isStateChanged);
         }
 
         public void DoMouseEvent(dynamic obj)
@@ -263,7 +282,7 @@ namespace MyExplorer
         /// <param name="str"></param>
         public void SetFolderPathText(string str)
         {
-            // TODO 実装
+            FolderPath.Text = str;
         }
     }
 }

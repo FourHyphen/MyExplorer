@@ -39,16 +39,19 @@ namespace TestMyExplorer
         {
             string folderPath = Common.GetFilePathOfDependentEnvironment(@"./TestData/");
             ExplorerData explorer = new ExplorerData(folderPath);
-            explorer.IntoFolder("Folder1");
+            explorer.IntoFolder("Folder1", out bool isStateChanged);
+            Assert.IsTrue(isStateChanged);
             Assert.IsTrue(explorer.FolderPath.Contains(@"TestData\Folder1"));
             Assert.AreEqual(expected: 3, actual: explorer.FileList.Count);
 
-            explorer.IntoFolder("folder01");
+            explorer.IntoFolder("folder01", out isStateChanged);
+            Assert.IsTrue(isStateChanged);
             Assert.IsTrue(explorer.FolderPath.Contains(@"TestData\Folder1\folder01"));
             Assert.AreEqual(expected: 0, actual: explorer.FileList.Count);
 
             // 存在しないフォルダには入れない、状態変化しない
-            explorer.IntoFolder("NOT_EXIST");
+            explorer.IntoFolder("NOT_EXIST", out isStateChanged);
+            Assert.IsFalse(isStateChanged);
             Assert.IsTrue(explorer.FolderPath.Contains(@"TestData\Folder1\folder01"));
             Assert.AreEqual(expected: 0, actual: explorer.FileList.Count);
         }
