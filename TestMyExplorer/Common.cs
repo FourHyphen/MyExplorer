@@ -4,6 +4,8 @@ namespace TestMyExplorer
 {
     class Common
     {
+        public static readonly string GoBackString = "(←)";
+
         public static string GetEnvironmentDirPath()
         {
             if (System.IO.Directory.Exists(Environment.CurrentDirectory + "/TestData"))

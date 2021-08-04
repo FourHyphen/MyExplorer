@@ -156,13 +156,46 @@ namespace TestMyExplorer
         }
 
         [TestMethod]
-        [Ignore]
-        public void NoExistFileInFolder()
+        public void ContainIconThatBackFolder()
         {
-            // ファイルやフォルダが 1 つも存在しないフォルダの場合、ファイルリストにそれを示す 1 行を表示する
-            // テストに「存在しないことを示す 1 行が表示されている状態からファイル作成して状態更新したらその 1 行が消えること」を入れる
-            //  -> これには UpdateFolderInfo() テストが先に必要なので Ignore とする
-            Assert.Fail();
+            // どのフォルダを表示しても、ファイルリストの先頭に 1 階層上に上るアイコンを表示する
+            string folderPath = Common.GetFilePathOfDependentEnvironment(@".\TestData");
+            string testFolderName = @"FolderEmpty";
+            string testFolderPath = System.IO.Path.Combine(folderPath, testFolderName);
+
+            // 準備
+            DeleteFolder(testFolderPath);
+            CreateFolder(testFolderPath);
+
+            // ファイルが 1 つも存在しないフォルダの場合
+            CreateFolder(testFolderPath);
+            Driver.OpenFolder(testFolderPath);
+            Assert.IsTrue(Driver.ContainFile(Common.GoBackString));
+
+            string testFileName = "testEmpty.txt";
+            string testFilePath = System.IO.Path.Combine(testFolderPath, testFileName);
+            CreateFile(testFilePath);
+
+            // フォルダ内にファイルが作成され、状態更新後でも 1 階層上に上るアイコンは表示される
+            Driver.EmurateKey(System.Windows.Input.Key.F5, System.Windows.Input.ModifierKeys.None);
+            Assert.IsTrue(Driver.ContainFile(Common.GoBackString));
+            Assert.IsTrue(Driver.ContainFile(testFileName));
+
+            // 後始末
+            DeleteFolder(testFolderPath);
+        }
+
+        private void DeleteFolder(string folderPath)
+        {
+            if (System.IO.Directory.Exists(folderPath))
+            {
+                System.IO.Directory.Delete(folderPath, true);
+            }
+        }
+
+        private void CreateFolder(string folderPath)
+        {
+            System.IO.Directory.CreateDirectory(folderPath);
         }
     }
 }
