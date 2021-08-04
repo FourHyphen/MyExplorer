@@ -115,5 +115,54 @@ namespace TestMyExplorer
             Assert.IsTrue(Driver.GetFolderPath().Contains(@"NOT_EXIST"));
             Assert.IsTrue(Driver.ContainFile("text21.txt"));
         }
+
+        [TestMethod]
+        public void UpdateFolderInfo()
+        {
+            // F5 キーによるフォルダの状態更新
+            string folderPath = Common.GetFilePathOfDependentEnvironment(@".\TestData");
+            string testFileName = @"testfile.txt";
+            string testFilePath = System.IO.Path.Combine(folderPath, testFileName);
+
+            // 準備
+            DeleteFile(testFilePath);
+
+            Driver.OpenFolder(folderPath);
+            Assert.IsFalse(Driver.ContainFile(testFileName));
+
+            // ファイルを作成したばかりでは画面に反映されない
+            CreateFile(testFilePath);
+            Assert.IsFalse(Driver.ContainFile(testFileName));
+
+            // F5 キーによって状態更新され、作成したファイルが表示される
+            Driver.EmurateKey(System.Windows.Input.Key.F5, System.Windows.Input.ModifierKeys.None);
+            Assert.IsTrue(Driver.ContainFile(testFileName));
+
+            // 後始末
+            DeleteFile(testFilePath);
+        }
+
+        private void CreateFile(string filePath)
+        {
+            System.IO.File.WriteAllText(filePath, "test");
+        }
+
+        private void DeleteFile(string filePath)
+        {
+            if (System.IO.File.Exists(filePath))
+            {
+                System.IO.File.Delete(filePath);
+            }
+        }
+
+        [TestMethod]
+        [Ignore]
+        public void NoExistFileInFolder()
+        {
+            // ファイルやフォルダが 1 つも存在しないフォルダの場合、ファイルリストにそれを示す 1 行を表示する
+            // テストに「存在しないことを示す 1 行が表示されている状態からファイル作成して状態更新したらその 1 行が消えること」を入れる
+            //  -> これには UpdateFolderInfo() テストが先に必要なので Ignore とする
+            Assert.Fail();
+        }
     }
 }

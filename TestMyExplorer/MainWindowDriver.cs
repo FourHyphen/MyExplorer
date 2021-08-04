@@ -32,12 +32,14 @@ namespace TestMyExplorer
 
         internal bool ContainFile(string fileName)
         {
+            UpdateNowMainWindowStatus();
             return FileList.Contains(fileName, Tree);
         }
 
         internal void OpenFolder(string folderPath)
         {
             MainWindow.OpenFolder(folderPath);
+            UpdateNowMainWindowStatus();
         }
 
         internal void EmurateKey(Key key, ModifierKeys modifier)
@@ -55,16 +57,19 @@ namespace TestMyExplorer
         internal void FocusFile(string fileName)
         {
             MainWindow.FocusFile(fileName);
+            UpdateNowMainWindowStatus();
         }
 
         internal void FocusFolderPathArea()
         {
             MainWindow.FocusFolderPathArea();
+            UpdateNowMainWindowStatus();
         }
 
         internal void SetFolderPathText(string str)
         {
             MainWindow.SetFolderPathText(str);
+            UpdateNowMainWindowStatus();
         }
 
         private void UpdateNowMainWindowStatus()
