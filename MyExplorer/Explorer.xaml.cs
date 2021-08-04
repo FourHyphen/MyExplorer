@@ -82,7 +82,11 @@ namespace MyExplorer
         public void DoKeyEvent(Keys.KeyEventType keyEventType)
         {
             bool isStateChanged = false;
-            if (IsItemInFileList("IsFocused"))
+            if (keyEventType == Keys.KeyEventType.Update)
+            {
+                UpdateFolder(out isStateChanged);
+            }
+            else if (IsItemInFileList("IsFocused"))
             {
                 if (keyEventType == Keys.KeyEventType.FolderBack)
                 {
@@ -105,6 +109,11 @@ namespace MyExplorer
             {
                 NotifyDataChanged();
             }
+        }
+
+        private void UpdateFolder(out bool isStateChanged)
+        {
+            Data.Update(out isStateChanged);
         }
 
         private bool IsItemInFileList(string itemPropertyName)

@@ -13,6 +13,7 @@ namespace MyExplorer
             FolderBack,
             FolderForward,
             EnterKey,
+            Update,
             Else
         }
 
@@ -78,6 +79,10 @@ namespace MyExplorer
             else if (key == Key.Enter)
             {
                 return KeyEventType.EnterKey;
+            }
+            else if (key == Key.F5)
+            {
+                return KeyEventType.Update;
             }
 
             return KeyEventType.Else;

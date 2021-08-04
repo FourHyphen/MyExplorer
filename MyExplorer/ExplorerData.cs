@@ -32,6 +32,12 @@ namespace MyExplorer
             }
         }
 
+        public void Update(out bool isStateChanged)
+        {
+            SetFolderInfo(FolderPath);
+            isStateChanged = true;
+        }
+
         public void MoveFolderOneUp(out bool isStateChanged)
         {
             SetFolderInfo(System.IO.Path.GetDirectoryName(FolderPath));
