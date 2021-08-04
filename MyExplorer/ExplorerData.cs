@@ -19,8 +19,14 @@ namespace MyExplorer
         {
             FolderPath = folderPath;
             FileList = new List<string>();
+            AddGoBack();
             AddFiles(folderPath, System.IO.Directory.GetDirectories);
             AddFiles(folderPath, System.IO.Directory.GetFiles);
+        }
+
+        private void AddGoBack()
+        {
+            FileList.Add("(←)");
         }
 
         private void AddFiles(string folderPath, Func<string, string[]> func)
