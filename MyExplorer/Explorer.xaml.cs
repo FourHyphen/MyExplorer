@@ -82,7 +82,11 @@ namespace MyExplorer
         public void DoKeyEvent(Keys.KeyEventType keyEventType)
         {
             bool isStateChanged = false;
-            if (keyEventType == Keys.KeyEventType.Update)
+            if (keyEventType == Keys.KeyEventType.EnterKey)
+            {
+                DoEnterKeyEvent(out isStateChanged);
+            }
+            else if (keyEventType == Keys.KeyEventType.Update)
             {
                 UpdateFolder(out isStateChanged);
             }
@@ -97,18 +101,34 @@ namespace MyExplorer
                     ForwardFolder(out isStateChanged);
                 }
             }
-            else if (FolderPath.IsFocused)
-            {
-                if (keyEventType == Keys.KeyEventType.EnterKey)
-                {
-                    MoveFolder(out isStateChanged);
-                }
-            }
 
             if (isStateChanged)
             {
                 NotifyDataChanged();
             }
+        }
+
+        private void DoEnterKeyEvent(out bool isStateChanged)
+        {
+            isStateChanged = false;
+            if (FolderPath.IsFocused)
+            {
+                MoveFolder(out isStateChanged);
+            }
+            else
+            {
+                ListViewItem top = GetListViewItem(Common.MoveOneUpFolderString);
+                if (top.IsFocused)
+                {
+                    BackFolder(out isStateChanged);
+                }
+            }
+        }
+
+        private void MoveFolder(out bool isStateChanged)
+        {
+            string input = FolderPath.Text;
+            Data.MoveFolder(input, out isStateChanged);
         }
 
         private void UpdateFolder(out bool isStateChanged)
@@ -160,12 +180,6 @@ namespace MyExplorer
         {
             object selected = FolderFileList.SelectedItem;
             return selected != null ? selected.ToString() : "";
-        }
-
-        private void MoveFolder(out bool isStateChanged)
-        {
-            string input = FolderPath.Text;
-            Data.MoveFolder(input, out isStateChanged);
         }
 
         public void DoMouseEvent(dynamic obj)

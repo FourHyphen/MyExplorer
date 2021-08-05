@@ -26,7 +26,7 @@ namespace MyExplorer
 
         private void AddGoBack()
         {
-            FileList.Add("(←)");
+            FileList.Add(Common.MoveOneUpFolderString);
         }
 
         private void AddFiles(string folderPath, Func<string, string[]> func)

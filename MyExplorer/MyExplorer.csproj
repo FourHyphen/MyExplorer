@@ -72,6 +72,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Common.cs" />
     <Compile Include="DialogOpenFolder.cs" />
     <Compile Include="Explorer.xaml.cs">
       <DependentUpon>Explorer.xaml</DependentUpon>
