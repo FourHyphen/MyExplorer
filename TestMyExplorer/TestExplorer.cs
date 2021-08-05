@@ -56,5 +56,17 @@ namespace TestMyExplorer
             Assert.IsTrue(explorer.FolderPath.Contains(@"TestData\Folder1\folder01"));
             Assert.AreEqual(expected: 1, actual: explorer.FileList.Count);
         }
+
+        [TestMethod]
+        public void MoveOneUpFolder()
+        {
+            // 1 階層上に上るテスト
+            // 1 階層上に上るアイコンを実行したとき、←キー押下時が該当
+            string folderPath = Common.GetFilePathOfDependentEnvironment(@"./TestData/Folder1/folder01");
+            ExplorerData explorer = new ExplorerData(folderPath);
+            explorer.MoveFolderOneUp(out bool tmp);
+            Assert.IsFalse(explorer.FolderPath.Contains(@"folder01"));
+            Assert.IsTrue(explorer.FolderPath.Contains(@"TestData\Folder1"));
+        }
     }
 }
