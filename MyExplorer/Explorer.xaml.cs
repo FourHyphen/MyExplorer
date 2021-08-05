@@ -81,26 +81,8 @@ namespace MyExplorer
 
         public void DoKeyEvent(Keys.KeyEventType keyEventType)
         {
-            bool isStateChanged = false;
-            if (keyEventType == Keys.KeyEventType.EnterKey)
-            {
-                DoEnterKeyEvent(out isStateChanged);
-            }
-            else if (keyEventType == Keys.KeyEventType.Update)
-            {
-                UpdateFolder(out isStateChanged);
-            }
-            else if (IsItemInFileList("IsFocused"))
-            {
-                if (keyEventType == Keys.KeyEventType.FolderBack)
-                {
-                    BackFolder(out isStateChanged);
-                }
-                else if (keyEventType == Keys.KeyEventType.FolderForward)
-                {
-                    ForwardFolder(out isStateChanged);
-                }
-            }
+            ExplorerCommand ec = ExplorerCommandFactory.Create(this, keyEventType);
+            ec.Execute(out bool isStateChanged);
 
             if (isStateChanged)
             {
@@ -108,35 +90,7 @@ namespace MyExplorer
             }
         }
 
-        private void DoEnterKeyEvent(out bool isStateChanged)
-        {
-            isStateChanged = false;
-            if (FolderPath.IsFocused)
-            {
-                MoveFolder(out isStateChanged);
-            }
-            else
-            {
-                ListViewItem top = GetListViewItem(Common.MoveOneUpFolderString);
-                if (top.IsFocused)
-                {
-                    BackFolder(out isStateChanged);
-                }
-            }
-        }
-
-        private void MoveFolder(out bool isStateChanged)
-        {
-            string input = FolderPath.Text;
-            Data.MoveFolder(input, out isStateChanged);
-        }
-
-        private void UpdateFolder(out bool isStateChanged)
-        {
-            Data.Update(out isStateChanged);
-        }
-
-        private bool IsItemInFileList(string itemPropertyName)
+        public bool IsItemInFileList(string itemPropertyName)
         {
             // 参考: https://threeshark3.com/binding-listbox-focus/
             for (int i = 0; i < FolderFileList.Items.Count; i++)
@@ -158,28 +112,6 @@ namespace MyExplorer
         private object GetItemInFolderFileList(int index)
         {
             return FolderFileList.ItemContainerGenerator.ContainerFromIndex(index);
-        }
-
-        private void BackFolder(out bool isStateChanged)
-        {
-            Data.MoveFolderOneUp(out isStateChanged);
-        }
-
-        private void ForwardFolder(out bool isStateChanged)
-        {
-            isStateChanged = false;
-
-            string selectedName = GetFolderFileListSelected();
-            if (selectedName != "")
-            {
-                Data.IntoFolder(selectedName, out isStateChanged);
-            }
-        }
-
-        private string GetFolderFileListSelected()
-        {
-            object selected = FolderFileList.SelectedItem;
-            return selected != null ? selected.ToString() : "";
         }
 
         public void DoMouseEvent(dynamic obj)
@@ -238,7 +170,7 @@ namespace MyExplorer
             }
         }
 
-        private ListViewItem GetListViewItem(string content)
+        public ListViewItem GetListViewItem(string content)
         {
             for (int i = 0; i < FolderFileList.Items.Count; i++)
             {

@@ -77,6 +77,13 @@
     <Compile Include="Explorer.xaml.cs">
       <DependentUpon>Explorer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ExplorerCommand.cs" />
+    <Compile Include="ExplorerCommandBackFolder.cs" />
+    <Compile Include="ExplorerCommandFactory.cs" />
+    <Compile Include="ExplorerCommandForwardFolder.cs" />
+    <Compile Include="ExplorerCommandMoveFolder.cs" />
+    <Compile Include="ExplorerCommandNone.cs" />
+    <Compile Include="ExplorerCommandUpdateFolder.cs" />
     <Compile Include="ExplorerData.cs" />
     <Compile Include="Keys.cs" />
     <Compile Include="MainWindow.xaml.cs">
