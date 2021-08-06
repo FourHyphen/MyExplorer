@@ -10,14 +10,16 @@ namespace MyExplorer
     {
         public ExplorerCommandForwardFolder(Explorer explorer) : base(explorer) { }
 
-        public override void Execute(out bool isStateChanged)
+        public override void Execute()
         {
-            isStateChanged = false;
-
             string selectedName = GetFolderFileListSelected();
             if (selectedName != "")
             {
-                Explorer.Data.IntoFolder(selectedName, out isStateChanged);
+                Explorer.Data.IntoFolder(selectedName, out bool isStateChanged);
+                if (isStateChanged)
+                {
+                    IsDataChanged = true;
+                }
             }
         }
 

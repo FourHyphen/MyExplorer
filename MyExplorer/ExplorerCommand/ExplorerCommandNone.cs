@@ -10,9 +10,10 @@ namespace MyExplorer
     {
         public ExplorerCommandNone(Explorer explorer) : base(explorer) { }
 
-        public override void Execute(out bool isStateChanged)
+        public override void Execute()
         {
-            isStateChanged = false;
+            IsDataChanged = false;
+            IsSelectedItemChanged = false;
         }
     }
 }

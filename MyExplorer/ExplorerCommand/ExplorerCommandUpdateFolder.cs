@@ -10,9 +10,13 @@ namespace MyExplorer
     {
         public ExplorerCommandUpdateFolder(Explorer explorer) : base(explorer) { }
 
-        public override void Execute(out bool isStateChanged)
+        public override void Execute()
         {
-            Explorer.Data.Update(out isStateChanged);
+            Explorer.Data.Update(out bool isStateChanged);
+            if (isStateChanged)
+            {
+                IsDataChanged = true;
+            }
         }
     }
 }

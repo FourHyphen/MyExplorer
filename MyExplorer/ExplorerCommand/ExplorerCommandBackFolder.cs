@@ -10,9 +10,13 @@ namespace MyExplorer
     {
         public ExplorerCommandBackFolder(Explorer explorer) : base(explorer) { }
 
-        public override void Execute(out bool isStateChanged)
+        public override void Execute()
         {
-            Explorer.Data.MoveFolderOneUp(out isStateChanged);
+            Explorer.Data.MoveFolderOneUp(out bool isStateChanged);
+            if (isStateChanged)
+            {
+                IsDataChanged = true;
+            }
         }
     }
 }

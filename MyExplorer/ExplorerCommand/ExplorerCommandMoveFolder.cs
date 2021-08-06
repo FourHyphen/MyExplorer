@@ -10,10 +10,14 @@ namespace MyExplorer
     {
         public ExplorerCommandMoveFolder(Explorer explorer) : base(explorer) { }
 
-        public override void Execute(out bool isStateChanged)
+        public override void Execute()
         {
             string input = Explorer.FolderPath.Text;
-            Explorer.Data.MoveFolder(input, out isStateChanged);
+            Explorer.Data.MoveFolder(input, out bool isStateChanged);
+            if (isStateChanged)
+            {
+                IsDataChanged = true;
+            }
         }
     }
 }

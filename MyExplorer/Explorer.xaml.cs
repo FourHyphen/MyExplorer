@@ -82,33 +82,26 @@ namespace MyExplorer
         public void DoKeyEvent(Keys.KeyEventType keyEventType)
         {
             ExplorerCommand ec = ExplorerCommandFactory.Create(this, keyEventType);
-            ec.Execute(out bool isStateChanged);
-
-            if (isStateChanged)
-            {
-                NotifyDataChanged();
-            }
+            DoEventCore(ec);
         }
 
         public void DoMouseEvent(dynamic obj)
         {
             ExplorerCommand ec = ExplorerCommandFactory.Create(this, obj);
-            ec.Execute(out bool isStateChanged);
+            DoEventCore(ec);
+        }
 
-            if (isStateChanged)
+        private void DoEventCore(ExplorerCommand ec)
+        {
+            ec.Execute();
+            if (ec.IsDataChanged)
             {
-                NotifySelectedItemChanged();
+                NotifyPropertyChanged(nameof(Data));
             }
-        }
-
-        private void NotifyDataChanged()
-        {
-            NotifyPropertyChanged(nameof(Data));
-        }
-
-        private void NotifySelectedItemChanged()
-        {
-            NotifyPropertyChanged(nameof(SelectedItem));
+            if (ec.IsSelectedItemChanged)
+            {
+                NotifyPropertyChanged(nameof(SelectedItem));
+            }
         }
 
         public void NotifyPropertyChanged(string name)

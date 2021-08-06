@@ -12,30 +12,29 @@ namespace MyExplorer
     {
         public ExplorerCommandChangeItemFocus(Explorer explorer) : base(explorer) { }
 
-        public override void Execute(out bool isStateChanged)
+        public override void Execute()
         {
             if (Explorer.IsItemInFileList("IsFocused"))
             {
                 // FileList の Item にフォーカスが当たってる状態で Item でない ListView 領域をクリックするとここを通る
                 // Item の Selected を解除
                 Explorer.SelectedItem = null;
-                isStateChanged = true;
+                IsSelectedItemChanged = true;
             }
             else
             {
                 // FileList にフォーカスを当てる
-                SetFocusFileList(out isStateChanged);
+                SetFocusFileList();
             }
         }
 
-        private void SetFocusFileList(out bool isStateChanged)
+        private void SetFocusFileList()
         {
-            isStateChanged = false;
             if (Explorer.SelectedItem == null)
             {
                 // 真に何も選択されていない場合、FileList フォーカスを当てる
                 SetFocusFolderFileList();
-                isStateChanged = true;
+                IsSelectedItemChanged = true;
             }
             else if (Explorer.SelectedItem is string itemString)
             {
@@ -45,7 +44,7 @@ namespace MyExplorer
                 if (item != null)
                 {
                     SetFocusFile(item);
-                    isStateChanged = true;
+                    IsSelectedItemChanged = true;
                 }
             }
         }

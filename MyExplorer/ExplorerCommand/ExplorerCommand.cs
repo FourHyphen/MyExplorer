@@ -10,11 +10,15 @@ namespace MyExplorer
     {
         protected Explorer Explorer { get; set; }
 
+        public bool IsDataChanged { get; protected set; } = false;
+
+        public bool IsSelectedItemChanged { get; protected set; } = false;
+
         public ExplorerCommand(Explorer explorer)
         {
             Explorer = explorer;
         }
 
-        public abstract void Execute(out bool isStateChanged);
+        public abstract void Execute();
     }
 }
