@@ -1,10 +1,15 @@
-﻿using System;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace MyExplorer
 {
     public class ExplorerCommandFactory
     {
+        /// <summary>
+        /// キーボードイベント
+        /// </summary>
+        /// <param name="explorer"></param>
+        /// <param name="keyEventType"></param>
+        /// <returns></returns>
         public static ExplorerCommand Create(Explorer explorer, Keys.KeyEventType keyEventType)
         {
             if (keyEventType == Keys.KeyEventType.EnterKey)
@@ -46,6 +51,33 @@ namespace MyExplorer
             }
 
             return new ExplorerCommandNone(explorer);
+        }
+
+        /// <summary>
+        /// マウスイベントを想定
+        /// </summary>
+        /// <param name="explorer"></param>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static ExplorerCommand Create(Explorer explorer, dynamic obj)
+        {
+            if (DoMouseDownFileList(obj))
+            {
+                return new ExplorerCommandChangeItemFocus(explorer);
+            }
+
+            return new ExplorerCommandNone(explorer);
+        }
+
+        private static bool DoMouseDownFileList(dynamic obj)
+        {
+            if (obj is ScrollViewer sv)
+            {
+                // Item が選択されている場合は false 判定になる
+                return (sv.TemplatedParent is ListView);
+            }
+
+            return false;
         }
     }
 }

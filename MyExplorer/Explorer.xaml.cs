@@ -23,7 +23,7 @@ namespace MyExplorer
 
         public ExplorerData Data { get; private set; }
 
-        public object SelectedItem { get; private set; }
+        public object SelectedItem { get; set; }
 
         public int FolderAreaWidth { get; private set; }
 
@@ -116,57 +116,12 @@ namespace MyExplorer
 
         public void DoMouseEvent(dynamic obj)
         {
-            if (DoMouseDownFileList(obj))
-            {
-                DoMouseEventFileList();
-            }
-        }
+            ExplorerCommand ec = ExplorerCommandFactory.Create(this, obj);
+            ec.Execute(out bool isStateChanged);
 
-        private bool DoMouseDownFileList(dynamic obj)
-        {
-            if (obj is ScrollViewer sv)
+            if (isStateChanged)
             {
-                // Item が選択されている場合は false 判定になる
-                return (sv.TemplatedParent is ListView);
-            }
-
-            return false;
-        }
-
-        private void DoMouseEventFileList()
-        {
-            if (IsItemInFileList("IsFocused"))
-            {
-                // Item の Selected を解除
-                SelectedItem = null;
-            }
-            else
-            {
-                // FileList にフォーカスを当てる
-                SetFocusFileList();
-            }
-
-            NotifySelectedItemChanged();
-        }
-
-        private void SetFocusFileList()
-        {
-            if (SelectedItem == null)
-            {
-                // 真に何も選択されていない場合、FileList にキーボードフォーカスと論理フォーカスを当てる
-                FolderFileList.Focus();
-                Keyboard.Focus(FolderFileList);
-            }
-
-            if (SelectedItem is string itemString)
-            {
-                // 選択されている状態でフォーカスが ListView から外れ、再度 ListView にフォーカス当たった場合にここを通る
-                // この場合はファイルにフォーカスを当てなおす
-                ListViewItem item = GetListViewItem(itemString);
-                if (item != null)
-                {
-                    SetFocusFile(item);
-                }
+                NotifySelectedItemChanged();
             }
         }
 
@@ -185,12 +140,6 @@ namespace MyExplorer
             }
 
             return null;
-        }
-
-        private void SetFocusFile(ListViewItem selected)
-        {
-            Keyboard.Focus(selected);
-            selected.Focus();
         }
 
         private void NotifyDataChanged()
@@ -227,7 +176,8 @@ namespace MyExplorer
             ListViewItem selected = GetListViewItem(fileName);
             if (selected != null)
             {
-                SetFocusFile(selected);
+                Keyboard.Focus(selected);
+                selected.Focus();
             }
         }
 
