@@ -14,9 +14,9 @@ namespace MyExplorer
 
         public override void Execute(out bool isStateChanged)
         {
-            isStateChanged = false;
             if (Explorer.IsItemInFileList("IsFocused"))
             {
+                // FileList の Item にフォーカスが当たってる状態で Item でない ListView 領域をクリックするとここを通る
                 // Item の Selected を解除
                 Explorer.SelectedItem = null;
                 isStateChanged = true;
@@ -24,21 +24,20 @@ namespace MyExplorer
             else
             {
                 // FileList にフォーカスを当てる
-                SetFocusFileList();
-                isStateChanged = true;
+                SetFocusFileList(out isStateChanged);
             }
         }
 
-        private void SetFocusFileList()
+        private void SetFocusFileList(out bool isStateChanged)
         {
+            isStateChanged = false;
             if (Explorer.SelectedItem == null)
             {
-                // 真に何も選択されていない場合、FileList にキーボードフォーカスと論理フォーカスを当てる
-                Explorer.FolderFileList.Focus();
-                Keyboard.Focus(Explorer.FolderFileList);
+                // 真に何も選択されていない場合、FileList フォーカスを当てる
+                SetFocusFolderFileList();
+                isStateChanged = true;
             }
-
-            if (Explorer.SelectedItem is string itemString)
+            else if (Explorer.SelectedItem is string itemString)
             {
                 // 選択されている状態でフォーカスが ListView から外れ、再度 ListView にフォーカス当たった場合にここを通る
                 // この場合はファイルにフォーカスを当てなおす
@@ -46,8 +45,15 @@ namespace MyExplorer
                 if (item != null)
                 {
                     SetFocusFile(item);
+                    isStateChanged = true;
                 }
             }
+        }
+
+        private void SetFocusFolderFileList()
+        {
+            Keyboard.Focus(Explorer.FolderFileList);
+            Explorer.FolderFileList.Focus();
         }
 
         private void SetFocusFile(ListViewItem selected)

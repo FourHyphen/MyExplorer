@@ -90,6 +90,33 @@ namespace MyExplorer
             }
         }
 
+        public void DoMouseEvent(dynamic obj)
+        {
+            ExplorerCommand ec = ExplorerCommandFactory.Create(this, obj);
+            ec.Execute(out bool isStateChanged);
+
+            if (isStateChanged)
+            {
+                NotifySelectedItemChanged();
+            }
+        }
+
+        private void NotifyDataChanged()
+        {
+            NotifyPropertyChanged(nameof(Data));
+        }
+
+        private void NotifySelectedItemChanged()
+        {
+            NotifyPropertyChanged(nameof(SelectedItem));
+        }
+
+        public void NotifyPropertyChanged(string name)
+        {
+            var e = new PropertyChangedEventArgs(name);
+            PropertyChanged?.Invoke(this, e);
+        }
+
         public bool IsItemInFileList(string itemPropertyName)
         {
             // 参考: https://threeshark3.com/binding-listbox-focus/
@@ -114,17 +141,6 @@ namespace MyExplorer
             return FolderFileList.ItemContainerGenerator.ContainerFromIndex(index);
         }
 
-        public void DoMouseEvent(dynamic obj)
-        {
-            ExplorerCommand ec = ExplorerCommandFactory.Create(this, obj);
-            ec.Execute(out bool isStateChanged);
-
-            if (isStateChanged)
-            {
-                NotifySelectedItemChanged();
-            }
-        }
-
         public ListViewItem GetListViewItem(string content)
         {
             for (int i = 0; i < FolderFileList.Items.Count; i++)
@@ -140,22 +156,6 @@ namespace MyExplorer
             }
 
             return null;
-        }
-
-        private void NotifyDataChanged()
-        {
-            NotifyPropertyChanged(nameof(Data));
-        }
-
-        private void NotifySelectedItemChanged()
-        {
-            NotifyPropertyChanged(nameof(SelectedItem));
-        }
-
-        public void NotifyPropertyChanged(string name)
-        {
-            var e = new PropertyChangedEventArgs(name);
-            PropertyChanged?.Invoke(this, e);
         }
 
         /// <summary>
