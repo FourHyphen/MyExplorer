@@ -110,33 +110,15 @@ namespace MyExplorer
             PropertyChanged?.Invoke(this, e);
         }
 
-        public bool IsItemInFileList(string itemPropertyName)
+        public bool IsFocusedItemInFileList()
         {
-            // 参考: https://threeshark3.com/binding-listbox-focus/
-            for (int i = 0; i < FolderFileList.Items.Count; i++)
-            {
-                var obj = GetItemInFolderFileList(i);
-                if (obj is ListViewItem target)
-                {
-                    PropertyInfo pi = typeof(ListViewItem).GetProperty(itemPropertyName);
-                    if ((bool)pi.GetValue(target))
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        private object GetItemInFolderFileList(int index)
-        {
-            return FolderFileList.ItemContainerGenerator.ContainerFromIndex(index);
+            ListViewItem item = GetListViewItemFocused();
+            return item != null;
         }
 
         public ListViewItem GetListViewItemFocused()
         {
-            // TODO: IsItemInFileList("IsFocused") と共通化できる
+            // 参考: https://threeshark3.com/binding-listbox-focus/
             for (int i = 0; i < FolderFileList.Items.Count; i++)
             {
                 var obj = GetItemInFolderFileList(i);
@@ -150,6 +132,11 @@ namespace MyExplorer
             }
 
             return null;
+        }
+
+        private object GetItemInFolderFileList(int index)
+        {
+            return FolderFileList.ItemContainerGenerator.ContainerFromIndex(index);
         }
 
         public ListViewItem GetListViewItem(string content)

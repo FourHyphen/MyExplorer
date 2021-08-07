@@ -14,7 +14,7 @@ namespace MyExplorer
 
         public override void Execute()
         {
-            if (Explorer.IsItemInFileList("IsFocused"))
+            if (Explorer.IsFocusedItemInFileList())
             {
                 // FileList の Item にフォーカスが当たってる状態で Item でない ListView 領域をクリックするとここを通る
                 // Item の Selected を解除

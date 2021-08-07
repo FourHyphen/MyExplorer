@@ -20,7 +20,7 @@ namespace MyExplorer
             {
                 return new ExplorerCommandUpdateFolder(explorer);
             }
-            else if (explorer.IsItemInFileList("IsFocused"))
+            else if (explorer.IsFocusedItemInFileList())
             {
                 if (keyEventType == Keys.KeyEventType.FolderBack)
                 {
