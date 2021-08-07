@@ -134,6 +134,24 @@ namespace MyExplorer
             return FolderFileList.ItemContainerGenerator.ContainerFromIndex(index);
         }
 
+        public ListViewItem GetListViewItemFocused()
+        {
+            // TODO: IsItemInFileList("IsFocused") と共通化できる
+            for (int i = 0; i < FolderFileList.Items.Count; i++)
+            {
+                var obj = GetItemInFolderFileList(i);
+                if (obj is ListViewItem target)
+                {
+                    if (target.IsFocused)
+                    {
+                        return target;
+                    }
+                }
+            }
+
+            return null;
+        }
+
         public ListViewItem GetListViewItem(string content)
         {
             for (int i = 0; i < FolderFileList.Items.Count; i++)

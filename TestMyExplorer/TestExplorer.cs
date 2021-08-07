@@ -68,5 +68,15 @@ namespace TestMyExplorer
             Assert.IsFalse(explorer.FolderPath.Contains(@"folder01"));
             Assert.IsTrue(explorer.FolderPath.Contains(@"TestData\Folder1"));
         }
+
+        [TestMethod]
+        public void IsFolder()
+        {
+            string folderPath = Common.GetFilePathOfDependentEnvironment(@"./TestData/Folder1");
+            ExplorerData explorer = new ExplorerData(folderPath);
+            Assert.IsTrue(explorer.IsFolder("folder01"));
+            Assert.IsFalse(explorer.IsFolder("text11.txt"));
+            Assert.IsFalse(explorer.IsFolder("NOT_EXIST"));
+        }
     }
 }

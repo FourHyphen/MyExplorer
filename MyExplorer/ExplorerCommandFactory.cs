@@ -14,7 +14,7 @@ namespace MyExplorer
         {
             if (keyEventType == Keys.KeyEventType.EnterKey)
             {
-                return DoEnterKeyEvent(explorer);
+                return CreateEnterKeyEvent(explorer);
             }
             else if (keyEventType == Keys.KeyEventType.Update)
             {
@@ -35,7 +35,7 @@ namespace MyExplorer
             return new ExplorerCommandNone(explorer);
         }
 
-        private static ExplorerCommand DoEnterKeyEvent(Explorer explorer)
+        private static ExplorerCommand CreateEnterKeyEvent(Explorer explorer)
         {
             if (explorer.FolderPath.IsFocused)
             {
@@ -47,6 +47,16 @@ namespace MyExplorer
                 if (top.IsFocused)
                 {
                     return new ExplorerCommandBackFolder(explorer);
+                }
+
+                ListViewItem focused = explorer.GetListViewItemFocused();
+                if (focused == null)
+                {
+                    return new ExplorerCommandNone(explorer);
+                }
+                if (explorer.Data.IsFolder((string)focused.Content))
+                {
+                    return new ExplorerCommandForwardFolder(explorer);
                 }
             }
 

@@ -38,6 +38,18 @@ namespace MyExplorer
             }
         }
 
+        public bool IsFolder(string fileName)
+        {
+            string file = FileList.Find(s => s == fileName);
+            if (file == null)
+            {
+                return false;
+            }
+
+            string filePath = System.IO.Path.Combine(FolderPath, file);
+            return System.IO.Directory.Exists(filePath);
+        }
+
         public void Update(out bool isStateChanged)
         {
             SetFolderInfo(FolderPath);
