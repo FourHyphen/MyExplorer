@@ -59,19 +59,19 @@ namespace TestMyExplorer
 
         internal void FocusFile(string fileName)
         {
-            MainWindow.FocusFile(fileName);
+            MainWindow.Explorer.FocusFile(fileName);
             UpdateNowMainWindowStatus();
         }
 
         internal void FocusFolderPathArea()
         {
-            MainWindow.FocusFolderPathArea();
+            MainWindow.Explorer.FocusFolderPathArea();
             UpdateNowMainWindowStatus();
         }
 
         internal void SetFolderPathText(string str)
         {
-            MainWindow.SetFolderPathText(str);
+            FolderPath.SetText(str, Tree);
             UpdateNowMainWindowStatus();
         }
 

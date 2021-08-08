@@ -66,31 +66,5 @@ namespace MyExplorer
             dynamic obj = result.VisualHit;
             Explorer.DoMouseEvent(obj);
         }
-
-        /// <summary>
-        /// テストでのみ使用
-        /// </summary>
-        private void FocusFolderPathArea()
-        {
-            Explorer.FocusFolderPathArea();
-        }
-
-        /// <summary>
-        /// テストでのみ使用
-        /// </summary>
-        /// <param name="fileName"></param>
-        private void FocusFile(string fileName)
-        {
-            Explorer.FocusFile(fileName);
-        }
-
-        /// <summary>
-        /// テストでのみ使用
-        /// </summary>
-        /// <param name="str"></param>
-        private void SetFolderPathText(string str)
-        {
-            Explorer.SetFolderPathText(str);
-        }
     }
 }

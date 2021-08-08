@@ -160,19 +160,19 @@ namespace MyExplorer
         }
 
         /// <summary>
-        /// テストで使用
+        /// テストから直接呼び出す
         /// </summary>
-        public void FocusFolderPathArea()
+        private void FocusFolderPathArea()
         {
             FolderPath.Focus();
             Keyboard.Focus(FolderPath);
         }
 
         /// <summary>
-        /// テストで使用
+        /// テストから直接呼び出す
         /// </summary>
         /// <param name="fileName"></param>
-        public void FocusFile(string fileName)
+        private void FocusFile(string fileName)
         {
             ListViewItem selected = GetListViewItem(fileName);
             if (selected != null)
@@ -180,15 +180,6 @@ namespace MyExplorer
                 Keyboard.Focus(selected);
                 selected.Focus();
             }
-        }
-
-        /// <summary>
-        /// テストで使用
-        /// </summary>
-        /// <param name="str"></param>
-        public void SetFolderPathText(string str)
-        {
-            FolderPath.Text = str;
         }
     }
 }

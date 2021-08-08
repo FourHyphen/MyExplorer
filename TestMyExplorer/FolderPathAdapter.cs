@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using RM.Friendly.WPFStandardControls;
+﻿using RM.Friendly.WPFStandardControls;
 using System.Reflection;
+using System.Windows;
 
 namespace TestMyExplorer
 {
@@ -26,6 +25,12 @@ namespace TestMyExplorer
             string str = text.ToString().Replace("System.Windows.Controls.TextBox: ", "");
             str = str.Replace("System.Windows.Controls.TextBox", "");    // 文字列が空の場合の対応
             return str;
+        }
+
+        public void SetText(string str, IWPFDependencyObjectCollection<DependencyObject> logicalTree)
+        {
+            WPFTextBox textBox= new WPFTextBox(logicalTree.ByType<System.Windows.Controls.TextBox>().ByName(ElementName).Single());
+            textBox.EmulateChangeText(str);
         }
     }
 }
