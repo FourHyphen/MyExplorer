@@ -146,9 +146,12 @@ namespace MyExplorer
                 var obj = GetItemInFolderFileList(i);
                 if (obj is ListViewItem target)
                 {
-                    if ((string)target.Content == content)
+                    if (target.Content is ExplorerFileInfo efi)
                     {
-                        return target;
+                        if (efi.Name == content)
+                        {
+                            return target;
+                        }
                     }
                 }
             }

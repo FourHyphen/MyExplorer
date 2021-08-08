@@ -8,7 +8,7 @@ namespace MyExplorer
     {
         public string FolderPath { get; set; } = "";
 
-        public List<string> FileList { get; set; } = null;
+        public List<ExplorerFileInfo> FileList { get; set; } = null;
 
         public ExplorerData(string folderPath)
         {
@@ -18,7 +18,7 @@ namespace MyExplorer
         private void SetFolderInfo(string folderPath)
         {
             FolderPath = folderPath;
-            FileList = new List<string>();
+            FileList = new List<ExplorerFileInfo>();
             AddGoBack();
             AddFiles(folderPath, System.IO.Directory.GetDirectories);
             AddFiles(folderPath, System.IO.Directory.GetFiles);
@@ -26,7 +26,7 @@ namespace MyExplorer
 
         private void AddGoBack()
         {
-            FileList.Add(Common.MoveOneUpFolderString);
+            FileList.Add(new ExplorerFileInfo(Common.MoveOneUpFolderString));
         }
 
         private void AddFiles(string folderPath, Func<string, string[]> func)
@@ -34,20 +34,19 @@ namespace MyExplorer
             string[] files = func(folderPath);
             foreach (string file in files)
             {
-                FileList.Add(System.IO.Path.GetFileName(file));
+                FileList.Add(new ExplorerFileInfo(file));
             }
         }
 
         public bool IsFolder(string fileName)
         {
-            string file = FileList.Find(s => s == fileName);
+            ExplorerFileInfo file = FileList.Find(s => s.Name == fileName);
             if (file == null)
             {
                 return false;
             }
 
-            string filePath = System.IO.Path.Combine(FolderPath, file);
-            return System.IO.Directory.Exists(filePath);
+            return file.Type == Common.TypeFolderString;
         }
 
         public void Update(out bool isStateChanged)
@@ -62,10 +61,9 @@ namespace MyExplorer
             isStateChanged = true;
         }
 
-        public void IntoFolder(string selectedName, out bool isStateChanged)
+        public void IntoFolder(ExplorerFileInfo efi, out bool isStateChanged)
         {
-            string selectedPath = System.IO.Path.Combine(FolderPath, selectedName);
-            MoveFolder(selectedPath, out isStateChanged);
+            MoveFolder(efi.FullPath, out isStateChanged);
         }
 
         public void MoveFolder(string folderPath, out bool isStateChanged)

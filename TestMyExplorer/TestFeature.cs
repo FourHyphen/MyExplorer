@@ -19,9 +19,7 @@ namespace TestMyExplorer
         //  -> MyExplorer プロジェクトを参照に追加
 
         private string AttachExeName = "MyExplorer.exe";
-        private WindowsAppFriend TestApp;
-        private Process TestProcess;
-        private dynamic MainWindow;
+        private WindowsAppFriend App;
         private MainWindowDriver Driver;
 
         private string BeforeEnvironment { get; set; }
@@ -31,11 +29,8 @@ namespace TestMyExplorer
         {
             // MainWindowプロセスにattach
             string exePath = System.IO.Path.GetFullPath(AttachExeName);
-            TestApp = new WindowsAppFriend(Process.Start(exePath));
-            TestProcess = Process.GetProcessById(TestApp.ProcessId);
-            MainWindow = TestApp.Type("System.Windows.Application").Current.MainWindow;
-
-            Driver = new MainWindowDriver(MainWindow);
+            App = new WindowsAppFriend(Process.Start(exePath));
+            Driver = new MainWindowDriver(App);
 
             BeforeEnvironment = Environment.CurrentDirectory;
             Environment.CurrentDirectory = Common.GetEnvironmentDirPath();
@@ -44,9 +39,10 @@ namespace TestMyExplorer
         [TestCleanup]
         public void Cleanup()
         {
-            TestApp.Dispose();
-            TestProcess.CloseMainWindow();
-            TestProcess.Dispose();
+            Process exeMainProcess = Process.GetProcessById(App.ProcessId);
+            App.Dispose();
+            exeMainProcess.CloseMainWindow();
+            exeMainProcess.Dispose();
 
             Environment.CurrentDirectory = BeforeEnvironment;
         }

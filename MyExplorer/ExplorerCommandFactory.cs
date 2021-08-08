@@ -54,7 +54,9 @@ namespace MyExplorer
                 {
                     return new ExplorerCommandNone(explorer);
                 }
-                if (explorer.Data.IsFolder((string)focused.Content))
+
+                ExplorerFileInfo efi = (ExplorerFileInfo)focused.Content;
+                if (efi.Type == Common.TypeFolderString)
                 {
                     return new ExplorerCommandForwardFolder(explorer);
                 }

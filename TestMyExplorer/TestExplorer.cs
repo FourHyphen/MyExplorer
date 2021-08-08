@@ -30,29 +30,26 @@ namespace TestMyExplorer
             Assert.IsTrue(explorer.Data.FolderPath.Contains(@"TestData\Folder1"));
 
             // [0] -> 1 階層上に上るアイコン
-            Assert.IsTrue(System.IO.Path.GetFileName(explorer.Data.FileList[1]) == "folder01");
-            Assert.IsTrue(System.IO.Path.GetFileName(explorer.Data.FileList[2]) == "text11.txt");
-            Assert.IsTrue(System.IO.Path.GetFileName(explorer.Data.FileList[3]) == "text12.txt");
+            Assert.IsTrue(System.IO.Path.GetFileName(explorer.Data.FileList[1].Name) == "folder01");
+            Assert.IsTrue(System.IO.Path.GetFileName(explorer.Data.FileList[2].Name) == "text11.txt");
+            Assert.IsTrue(System.IO.Path.GetFileName(explorer.Data.FileList[3].Name) == "text12.txt");
         }
 
         [TestMethod]
         public void ForwardFolder()
         {
             string folderPath = Common.GetFilePathOfDependentEnvironment(@"./TestData/");
+            ExplorerFileInfo efi = new ExplorerFileInfo(System.IO.Path.Combine(folderPath, "Folder1"));
+
             ExplorerData explorer = new ExplorerData(folderPath);
-            explorer.IntoFolder("Folder1", out bool isStateChanged);
+            explorer.IntoFolder(efi, out bool isStateChanged);
             Assert.IsTrue(isStateChanged);
             Assert.IsTrue(explorer.FolderPath.Contains(@"TestData\Folder1"));
             Assert.AreEqual(expected: 4, actual: explorer.FileList.Count);
 
-            explorer.IntoFolder("folder01", out isStateChanged);
+            efi = new ExplorerFileInfo(System.IO.Path.Combine(efi.FullPath, "folder01"));
+            explorer.IntoFolder(efi, out isStateChanged);
             Assert.IsTrue(isStateChanged);
-            Assert.IsTrue(explorer.FolderPath.Contains(@"TestData\Folder1\folder01"));
-            Assert.AreEqual(expected: 1, actual: explorer.FileList.Count);
-
-            // 存在しないフォルダには入れない、状態変化しない
-            explorer.IntoFolder("NOT_EXIST", out isStateChanged);
-            Assert.IsFalse(isStateChanged);
             Assert.IsTrue(explorer.FolderPath.Contains(@"TestData\Folder1\folder01"));
             Assert.AreEqual(expected: 1, actual: explorer.FileList.Count);
         }

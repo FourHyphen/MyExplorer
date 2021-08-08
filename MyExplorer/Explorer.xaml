@@ -20,6 +20,15 @@
                   Height="{Binding FolderFileListAreaHeight}"
                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                   ScrollViewer.VerticalScrollBarVisibility="Auto"
-                  SelectedItem="{Binding SelectedItem}"/>
+                  SelectedItem="{Binding SelectedItem}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="ファイル名" DisplayMemberBinding="{Binding Name}"/>
+                    <GridViewColumn Header="日付" DisplayMemberBinding="{Binding Date}"/>
+                    <GridViewColumn Header="タイプ" DisplayMemberBinding="{Binding Type}"/>
+                    <GridViewColumn Header="サイズ" DisplayMemberBinding="{Binding Size}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
     </StackPanel>
 </UserControl>

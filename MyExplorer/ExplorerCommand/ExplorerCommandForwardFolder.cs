@@ -12,21 +12,23 @@ namespace MyExplorer
 
         public override void Execute()
         {
-            string selectedName = GetFolderFileListSelected();
-            if (selectedName != "")
+            ExplorerFileInfo selectedItem = GetSelectedItemOfFolderFileList();
+            if (selectedItem == null)
             {
-                Explorer.Data.IntoFolder(selectedName, out bool isStateChanged);
-                if (isStateChanged)
-                {
-                    IsDataChanged = true;
-                }
+                return;
+            }
+
+            Explorer.Data.IntoFolder(selectedItem, out bool isStateChanged);
+            if (isStateChanged)
+            {
+                IsDataChanged = true;
             }
         }
 
-        private string GetFolderFileListSelected()
+        private ExplorerFileInfo GetSelectedItemOfFolderFileList()
         {
             object selected = Explorer.FolderFileList.SelectedItem;
-            return selected != null ? selected.ToString() : "";
+            return selected is ExplorerFileInfo efi ? efi : null;
         }
     }
 }

@@ -9,5 +9,7 @@ namespace MyExplorer
     public static class Common
     {
         public static readonly string MoveOneUpFolderString = "(←)";
+
+        public static readonly string TypeFolderString = "Folder";
     }
 }

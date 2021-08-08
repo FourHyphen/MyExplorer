@@ -1,7 +1,7 @@
-﻿using Codeer.Friendly.Windows.Grasp;
+﻿using Codeer.Friendly.Dynamic;
+using Codeer.Friendly.Windows;
+using Codeer.Friendly.Windows.Grasp;
 using RM.Friendly.WPFStandardControls;
-using System;
-using System.Collections.Generic;
 using System.Windows.Input;
 
 namespace TestMyExplorer
@@ -10,18 +10,21 @@ namespace TestMyExplorer
     {
         private dynamic MainWindow { get; }
 
+        private WindowsAppFriend App { get; }
+
         private IWPFDependencyObjectCollection<System.Windows.DependencyObject> Tree { get; set; }
 
         private FolderPathAdapter FolderPath { get; set; }
 
         private FileListAdapter FileList { get; set; }
 
-        public MainWindowDriver(dynamic mainWindow)
+        public MainWindowDriver(WindowsAppFriend app)
         {
-            MainWindow = mainWindow;
+            MainWindow = app.Type("System.Windows.Application").Current.MainWindow;
+            App = app;
             FolderPath = new FolderPathAdapter("FolderPath");
             FileList = new FileListAdapter("FolderFileList");
-            Tree = new WindowControl(mainWindow).LogicalTree();
+            Tree = new WindowControl(MainWindow).LogicalTree();
         }
 
         public string GetFolderPath()
@@ -33,7 +36,7 @@ namespace TestMyExplorer
         internal bool ContainFile(string fileName)
         {
             UpdateNowMainWindowStatus();
-            return FileList.Contains(fileName, Tree);
+            return FileList.Contains(fileName, MainWindow, App, Tree);
         }
 
         internal void OpenFolder(string folderPath)

@@ -17,7 +17,8 @@ namespace MyExplorer
 {
     public partial class MainWindow : Window
     {
-        private Explorer Explorer { get; set; } = null;
+        // public ゲッタはテスト用
+        public Explorer Explorer { get; private set; } = null;
 
         public MainWindow()
         {

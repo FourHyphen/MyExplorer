@@ -1,6 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Codeer.Friendly.Dynamic;
+using Codeer.Friendly.Windows;
 using RM.Friendly.WPFStandardControls;
+using System;
 using System.Reflection;
 
 namespace TestMyExplorer
@@ -14,21 +15,33 @@ namespace TestMyExplorer
             ElementName = elementName;
         }
 
-        public bool Contains(string str, IWPFDependencyObjectCollection<System.Windows.DependencyObject> logicalTree)
+        public bool Contains(string fileName,
+                             dynamic mainWindow,
+                             WindowsAppFriend app,
+                             IWPFDependencyObjectCollection<System.Windows.DependencyObject> logicalTree)
         {
-            string name = ElementName;
-            WPFListView listBox = GetFileListElement(name, logicalTree);
+            WPFListView listBox = GetFileListElement(ElementName, logicalTree);
+
             for (int i = 0; i < listBox.ItemCount; i++)
             {
-                WPFListViewItem item = listBox.GetItem(i);
-                string text = item.AppVar.ToString().Replace("System.Windows.Controls.ListViewItem: ", "");
-                if (text == str)
+                // Friendly 参考: https://qiita.com/advent-calendar/2014/friendly
+                dynamic val = app.Null();
+                WindowsAppExpander.LoadAssembly(app, GetType().Assembly);
+                app.Type(GetType()).GetExplorerFileInfo(mainWindow, i, out val);
+
+                //var tmp = (ExplorerFileInfo)val;    テストのためだけにクラスをシリアライズ化しない
+                if ((string)val.Name == fileName)
                 {
                     return true;
                 }
             }
 
             return false;
+        }
+
+        private static void GetExplorerFileInfo(MyExplorer.MainWindow main, int index, out dynamic val)
+        {
+            val = main.Explorer.Data.FileList[index];
         }
 
         private WPFListView GetFileListElement(string elementName, IWPFDependencyObjectCollection<System.Windows.DependencyObject> logicalTree)

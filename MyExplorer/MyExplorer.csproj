@@ -86,6 +86,7 @@
     <Compile Include="ExplorerCommand\ExplorerCommandNone.cs" />
     <Compile Include="ExplorerCommand\ExplorerCommandUpdateFolder.cs" />
     <Compile Include="ExplorerData.cs" />
+    <Compile Include="ExplorerFileInfo.cs" />
     <Compile Include="Keys.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
