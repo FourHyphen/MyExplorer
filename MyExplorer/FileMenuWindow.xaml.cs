@@ -42,6 +42,15 @@ namespace MyExplorer
             }
         }
 
+        private void KeyDowned(object sender, KeyEventArgs e)
+        {
+            //KeyDowned(e.Key, e.SystemKey, e.KeyboardDevice.Modifiers);
+            if (e.Key == Key.Enter)
+            {
+                Execute((FileExecute)FileMenuList.SelectedItem);
+            }
+        }
+
         private void Execute(FileExecute fe)
         {
             fe.Execute();

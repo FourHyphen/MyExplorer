@@ -13,6 +13,7 @@
             <ListView.Resources>
                 <Style TargetType="{x:Type ListViewItem}">
                     <EventSetter Event="PreviewMouseLeftButtonDown" Handler="MouseLeftButtonDownClicked"/>
+                    <EventSetter Event="KeyDown" Handler="KeyDowned"/>
                 </Style>
             </ListView.Resources>
 
