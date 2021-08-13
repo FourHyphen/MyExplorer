@@ -75,5 +75,15 @@ namespace TestMyExplorer
             Assert.IsFalse(explorer.IsFolder("text11.txt"));
             Assert.IsFalse(explorer.IsFolder("NOT_EXIST"));
         }
+
+        [TestMethod]
+        public void GetFileMenu()
+        {
+            string filePath = Common.GetFilePathOfDependentEnvironment(@"./TestData/Folder1/text11.txt");
+
+            FileMenuWindow fmw = new FileMenuWindow(filePath);
+            Assert.IsTrue(fmw.FileExecutes.Find(s => s.Name.Contains("開く")) != null);
+            Assert.IsTrue(fmw.FileExecutes.Find(s => s.Name.Contains("プログラムから開く")) != null);
+        }
     }
 }

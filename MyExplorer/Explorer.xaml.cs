@@ -134,6 +134,51 @@ namespace MyExplorer
             return null;
         }
 
+        private void DisplayFileMenuWindow(object sender, MouseButtonEventArgs e)
+        {
+            DisplayFileMenuWindow();
+        }
+
+        private void DisplayFileMenuWindow()
+        {
+            ExplorerFileInfo efi = (ExplorerFileInfo)FolderFileList.SelectedItem;
+            if (efi.FullPath != Common.MoveOneUpFolderString)
+            {
+                DisplayFileMenuWindow(efi);
+            }
+        }
+
+        private void DisplayFileMenuWindow(ExplorerFileInfo efi)
+        {
+            FileMenuWindow few = new FileMenuWindow(efi.FullPath);
+            few.Owner = GetParentWindow(this);    // MainWindow を親に設定
+            few.Show();
+            few.SetFocus();
+            IsEnabled = false;    // FileMenuWindow に最初からキーボードフォーカスを当てるための無効化
+            few.Closed += (object sender, EventArgs e) => IsEnabled = true;    // 無効化からの復帰
+        }
+
+        private Window GetParentWindow(FrameworkElement elem)
+        {
+            DependencyObject parent = elem.Parent;
+            if (parent is Window w)
+            {
+                return w;
+            }
+            else if (parent == null)
+            {
+                return null;
+            }
+            else if (parent is FrameworkElement p)
+            {
+                return GetParentWindow(p);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         private object GetItemInFolderFileList(int index)
         {
             return FolderFileList.ItemContainerGenerator.ContainerFromIndex(index);
