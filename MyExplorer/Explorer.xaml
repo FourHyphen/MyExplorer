@@ -24,6 +24,7 @@
             <ListView.Resources>
                 <Style TargetType="{x:Type ListViewItem}">
                     <EventSetter Event="PreviewMouseRightButtonDown" Handler="DisplayFileMenuWindow"/>
+                    <EventSetter Event="KeyDown" Handler="FolderFileListItemKeyDowned"/>
                 </Style>
             </ListView.Resources>
 

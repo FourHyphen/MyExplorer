@@ -134,6 +134,31 @@ namespace MyExplorer
             return null;
         }
 
+        private object GetItemInFolderFileList(int index)
+        {
+            return FolderFileList.ItemContainerGenerator.ContainerFromIndex(index);
+        }
+
+        public ListViewItem GetListViewItem(string content)
+        {
+            for (int i = 0; i < FolderFileList.Items.Count; i++)
+            {
+                var obj = GetItemInFolderFileList(i);
+                if (obj is ListViewItem target)
+                {
+                    if (target.Content is ExplorerFileInfo efi)
+                    {
+                        if (efi.Name == content)
+                        {
+                            return target;
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
         private void DisplayFileMenuWindow(object sender, MouseButtonEventArgs e)
         {
             DisplayFileMenuWindow();
@@ -142,14 +167,16 @@ namespace MyExplorer
         private void DisplayFileMenuWindow()
         {
             ExplorerFileInfo efi = (ExplorerFileInfo)FolderFileList.SelectedItem;
-            if (efi.FullPath != Common.MoveOneUpFolderString)
-            {
-                DisplayFileMenuWindow(efi);
-            }
+            DisplayFileMenuWindow(efi);
         }
 
         private void DisplayFileMenuWindow(ExplorerFileInfo efi)
         {
+            if (efi.Name == Common.MoveOneUpFolderString)
+            {
+                return;
+            }
+
             FileMenuWindow few = new FileMenuWindow(efi.FullPath);
             few.Owner = GetParentWindow(this);    // MainWindow を親に設定
             few.Show();
@@ -179,29 +206,24 @@ namespace MyExplorer
             }
         }
 
-        private object GetItemInFolderFileList(int index)
+        private void FolderFileListItemKeyDowned(object sender, KeyEventArgs e)
         {
-            return FolderFileList.ItemContainerGenerator.ContainerFromIndex(index);
-        }
-
-        public ListViewItem GetListViewItem(string content)
-        {
-            for (int i = 0; i < FolderFileList.Items.Count; i++)
+            // Shift + F10 => エクスプローラーでの右クリックによるメニュー呼び出しと同等機能
+            if (!IsPurposeDisplayFileMenuWindow(e.SystemKey, e.KeyboardDevice.Modifiers))
             {
-                var obj = GetItemInFolderFileList(i);
-                if (obj is ListViewItem target)
-                {
-                    if (target.Content is ExplorerFileInfo efi)
-                    {
-                        if (efi.Name == content)
-                        {
-                            return target;
-                        }
-                    }
-                }
+                return;
             }
 
-            return null;
+            ListViewItem selected = (ListViewItem)sender;
+            if (selected.Content is ExplorerFileInfo efi)
+            {
+                DisplayFileMenuWindow(efi);
+            }
+        }
+
+        private bool IsPurposeDisplayFileMenuWindow(Key systemKey, ModifierKeys modifier)
+        {
+            return (systemKey == Key.F10 && modifier == ModifierKeys.Shift);
         }
 
         /// <summary>
