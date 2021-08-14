@@ -5,12 +5,15 @@ namespace MyExplorer
 {
     public abstract class FileExecute
     {
+        public int Index { get; }
+
         public string Name { get; }
 
         protected string FilePath { get; set; }
 
-        public FileExecute(string name, string filePath)
+        public FileExecute(int index, string name, string filePath)
         {
+            Index = index;
             Name = name;
             FilePath = filePath;
         }

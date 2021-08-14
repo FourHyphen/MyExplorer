@@ -7,21 +7,22 @@
         xmlns:behaviors="clr-namespace:MyExplorer"
         mc:Ignorable="d"
         Title="FileMenuWindow" Height="300" Width="200">
-    <Grid>
+    <Grid KeyDown="WindowKeyDowned">
         <ListView x:Name="FileMenuList"
                   ItemsSource="{Binding Path=FileExecutes}">
             <ListView.Resources>
                 <Style TargetType="{x:Type ListViewItem}">
                     <EventSetter Event="PreviewMouseLeftButtonDown" Handler="MouseLeftButtonDownClicked"/>
-                    <EventSetter Event="KeyDown" Handler="KeyDowned"/>
+                    <EventSetter Event="KeyDown" Handler="FileMenuItemKeyDowned"/>
                 </Style>
             </ListView.Resources>
 
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ListViewItem Content="{Binding Name}"/>
-                </DataTemplate>
-            </ListView.ItemTemplate>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="項番" DisplayMemberBinding="{Binding Index}"/>
+                    <GridViewColumn Header="実行内容" DisplayMemberBinding="{Binding Name}"/>
+                </GridView>
+            </ListView.View>
         </ListView>
     </Grid>
 </Window>

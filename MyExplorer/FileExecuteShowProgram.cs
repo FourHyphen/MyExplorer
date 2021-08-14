@@ -4,7 +4,7 @@ namespace MyExplorer
 {
     public class FileExecuteShowProgram : FileExecute
     {
-        public FileExecuteShowProgram(string name, string filePath) : base(name, filePath) { }
+        public FileExecuteShowProgram(int index, string name, string filePath) : base(index, name, filePath) { }
 
         public override void Execute()
         {

@@ -8,7 +8,7 @@ namespace MyExplorer
 {
     public class FileExecuteOpen : FileExecute
     {
-        public FileExecuteOpen(string name, string filePath) : base(name, filePath) { }
+        public FileExecuteOpen(int index, string name, string filePath) : base(index, name, filePath) { }
 
         public override void Execute()
         {

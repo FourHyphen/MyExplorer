@@ -22,8 +22,8 @@ namespace MyExplorer
         private void InitMenu(string filePath)
         {
             FileExecutes = new List<FileExecute>();
-            FileExecutes.Add(new FileExecuteOpen("開く", filePath));
-            FileExecutes.Add(new FileExecuteShowProgram("プログラムから開く", filePath));
+            FileExecutes.Add(new FileExecuteOpen(1, "開く", filePath));
+            FileExecutes.Add(new FileExecuteShowProgram(2, "プログラムから開く", filePath));
             //FileExecutes.Add(new FileExecuteZip("zip圧縮", filePath);
         }
 
@@ -42,7 +42,60 @@ namespace MyExplorer
             }
         }
 
-        private void KeyDowned(object sender, KeyEventArgs e)
+        private void WindowKeyDowned(object sender, KeyEventArgs e)
+        {
+            int? num = ToInt(e.Key);
+            if (num != null)
+            {
+                Execute(FileExecutes[(int)num - 1]);    // 1 始まりを 0 始まりに変換
+            }
+        }
+
+        private int? ToInt(Key key)
+        {
+            if (key == Key.NumPad1 || key == Key.D1)
+            {
+                return 1;
+            }
+            else if (key == Key.NumPad2 || key == Key.D2)
+            {
+                return 2;
+            }
+            else if (key == Key.NumPad3 || key == Key.D3)
+            {
+                return 3;
+            }
+            else if (key == Key.NumPad4 || key == Key.D4)
+            {
+                return 4;
+            }
+            else if (key == Key.NumPad5 || key == Key.D5)
+            {
+                return 5;
+            }
+            else if (key == Key.NumPad6 || key == Key.D6)
+            {
+                return 6;
+            }
+            else if (key == Key.NumPad7 || key == Key.D7)
+            {
+                return 7;
+            }
+            else if (key == Key.NumPad8|| key == Key.D8)
+            {
+                return 8;
+            }
+            else if (key == Key.NumPad9 || key == Key.D9)
+            {
+                return 9;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private void FileMenuItemKeyDowned(object sender, KeyEventArgs e)
         {
             //KeyDowned(e.Key, e.SystemKey, e.KeyboardDevice.Modifiers);
             if (e.Key == Key.Enter)
