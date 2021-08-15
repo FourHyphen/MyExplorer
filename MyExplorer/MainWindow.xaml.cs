@@ -40,19 +40,5 @@ namespace MyExplorer
             Explorer.SetPosition(this);
             Explorer.Display(FoldersArea.Children);
         }
-
-        private void MainWindowKeyDown(object sender, KeyEventArgs e)
-        {
-            InputKey(e.Key, e.SystemKey, e.KeyboardDevice.Modifiers);
-        }
-
-        private void InputKey(Key key, Key systemKey, ModifierKeys modifier)
-        {
-            Keys.KeyEventType keyEventType = Keys.ToKeyEventType(key, systemKey, modifier);
-            if (keyEventType != Keys.KeyEventType.Else)
-            {
-                Explorer.DoKeyEvent(keyEventType);
-            }
-        }
     }
 }

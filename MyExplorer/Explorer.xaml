@@ -9,6 +9,7 @@
     <StackPanel x:Name="FolderArea"
                 Width="{Binding FolderAreaWidth}"
                 Height="{Binding FolderAreaHeight}"
+                PreviewKeyDown="KeyDowned"
                 PreviewMouseLeftButtonDown="MouseLeftButtonDownClicked">
         <TextBox x:Name="FolderPath"
                  Text="{Binding Data.FolderPath}"

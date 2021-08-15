@@ -49,11 +49,12 @@ namespace TestMyExplorer
         {
             if (modifier == ModifierKeys.None)
             {
-                MainWindow.InputKey(key, Key.None, modifier);
+                // MainWindow.FoldersArea とすると Canvas 型のメソッドを探してしまう
+                MainWindow.Explorer.KeyDowned(key, Key.None, modifier);
             }
             else
             {
-                MainWindow.InputKey(Key.None, key, modifier);
+                MainWindow.Explorer.KeyDowned(Key.None, key, modifier);
             }
         }
 

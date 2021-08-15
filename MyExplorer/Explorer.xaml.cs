@@ -79,6 +79,26 @@ namespace MyExplorer
             collection.Add(this);
         }
 
+        private void KeyDowned(object sender, KeyEventArgs e)
+        {
+            KeyDowned(e.Key, e.SystemKey, e.KeyboardDevice.Modifiers);
+        }
+
+        private void KeyDowned(Key key, Key systemKey, ModifierKeys modifier)
+        {
+            Keys.KeyEventType keyEventType = Keys.ToKeyEventType(key, systemKey, modifier);
+            if (keyEventType != Keys.KeyEventType.Else)
+            {
+                DoKeyEvent(keyEventType);
+            }
+        }
+
+        public void DoKeyEvent(Keys.KeyEventType keyEventType)
+        {
+            ExplorerCommand ec = ExplorerCommandFactory.Create(this, keyEventType);
+            DoEventCore(ec);
+        }
+
         private void MouseLeftButtonDownClicked(object sender, MouseButtonEventArgs e)
         {
             MouseLeftButtonDownClicked(e.GetPosition((UIElement)sender));
@@ -94,12 +114,6 @@ namespace MyExplorer
         public void DoMouseEvent(dynamic obj)
         {
             ExplorerCommand ec = ExplorerCommandFactory.Create(this, obj);
-            DoEventCore(ec);
-        }
-
-        public void DoKeyEvent(Keys.KeyEventType keyEventType)
-        {
-            ExplorerCommand ec = ExplorerCommandFactory.Create(this, keyEventType);
             DoEventCore(ec);
         }
 
