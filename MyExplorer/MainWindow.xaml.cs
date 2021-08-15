@@ -54,22 +54,5 @@ namespace MyExplorer
                 Explorer.DoKeyEvent(keyEventType);
             }
         }
-
-        private void MainWindowMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            MouseLeftButtonDownCore(e.GetPosition((UIElement)sender));
-        }
-
-        private void MouseLeftButtonDownCore(Point p)
-        {
-            if (Explorer == null)
-            {
-                return;
-            }
-
-            HitTestResult result = VisualTreeHelper.HitTest(this, p);
-            dynamic obj = result.VisualHit;
-            Explorer.DoMouseEvent(obj);
-        }
     }
 }

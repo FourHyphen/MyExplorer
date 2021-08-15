@@ -79,15 +79,27 @@ namespace MyExplorer
             collection.Add(this);
         }
 
-        public void DoKeyEvent(Keys.KeyEventType keyEventType)
+        private void MouseLeftButtonDownClicked(object sender, MouseButtonEventArgs e)
         {
-            ExplorerCommand ec = ExplorerCommandFactory.Create(this, keyEventType);
-            DoEventCore(ec);
+            MouseLeftButtonDownClicked(e.GetPosition((UIElement)sender));
+        }
+
+        private void MouseLeftButtonDownClicked(Point p)
+        {
+            HitTestResult result = VisualTreeHelper.HitTest(this, p);
+            dynamic obj = result.VisualHit;
+            DoMouseEvent(obj);
         }
 
         public void DoMouseEvent(dynamic obj)
         {
             ExplorerCommand ec = ExplorerCommandFactory.Create(this, obj);
+            DoEventCore(ec);
+        }
+
+        public void DoKeyEvent(Keys.KeyEventType keyEventType)
+        {
+            ExplorerCommand ec = ExplorerCommandFactory.Create(this, keyEventType);
             DoEventCore(ec);
         }
 
