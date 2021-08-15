@@ -81,21 +81,21 @@ namespace MyExplorer
 
         private void KeyDowned(object sender, KeyEventArgs e)
         {
-            KeyDowned(e.Key, e.SystemKey, e.KeyboardDevice.Modifiers);
+            KeyDowned(sender, e.Key, e.SystemKey, e.KeyboardDevice.Modifiers);
         }
 
-        private void KeyDowned(Key key, Key systemKey, ModifierKeys modifier)
+        private void KeyDowned(object sender, Key key, Key systemKey, ModifierKeys modifier)
         {
             Keys.KeyEventType keyEventType = Keys.ToKeyEventType(key, systemKey, modifier);
             if (keyEventType != Keys.KeyEventType.Else)
             {
-                DoKeyEvent(keyEventType);
+                DoKeyEvent(sender, keyEventType);
             }
         }
 
-        public void DoKeyEvent(Keys.KeyEventType keyEventType)
+        public void DoKeyEvent(object sender, Keys.KeyEventType keyEventType)
         {
-            ExplorerCommand ec = ExplorerCommandFactory.Create(this, keyEventType);
+            ExplorerCommand ec = ExplorerCommandFactory.Create(this, sender, keyEventType);
             DoEventCore(ec);
         }
 
@@ -108,12 +108,28 @@ namespace MyExplorer
         {
             HitTestResult result = VisualTreeHelper.HitTest(this, p);
             dynamic obj = result.VisualHit;
-            DoMouseEvent(obj);
+            DoLeftMouseEvent(obj);
         }
 
-        public void DoMouseEvent(dynamic obj)
+        public void DoLeftMouseEvent(dynamic obj)
         {
-            ExplorerCommand ec = ExplorerCommandFactory.Create(this, obj);
+            ExplorerCommand ec = ExplorerCommandFactory.CreateLeftButtonEvent(this, obj);
+            DoEventCore(ec);
+        }
+
+        private void FolderFileListItemMouseRightButtonClicked(object sender, MouseButtonEventArgs e)
+        {
+            FolderFileListItemMouseRightButtonClicked((ExplorerFileInfo)FolderFileList.SelectedItem);
+        }
+
+        private void FolderFileListItemMouseRightButtonClicked(ExplorerFileInfo efi)
+        {
+            DoRightMouseEvent(efi);
+        }
+
+        private void DoRightMouseEvent(ExplorerFileInfo efi)
+        {
+            ExplorerCommand ec = ExplorerCommandFactory.CreateRightButtonEvent(this, efi);
             DoEventCore(ec);
         }
 
@@ -183,90 +199,6 @@ namespace MyExplorer
             }
 
             return null;
-        }
-
-        private void DisplayFileMenuWindow(object sender, MouseButtonEventArgs e)
-        {
-            DisplayFileMenuWindow();
-        }
-
-        private void DisplayFileMenuWindow()
-        {
-            ExplorerFileInfo efi = (ExplorerFileInfo)FolderFileList.SelectedItem;
-            DisplayFileMenuWindow(efi);
-        }
-
-        private void DisplayFileMenuWindow(ExplorerFileInfo efi)
-        {
-            if (efi.Name == Common.MoveOneUpFolderString)
-            {
-                return;
-            }
-
-            FileMenuWindow few = new FileMenuWindow(efi.FullPath);
-            few.Owner = GetParentWindow(this);    // MainWindow を親に設定
-            few.Show();
-            few.SetFocus();
-            IsEnabled = false;    // FileMenuWindow に最初からキーボードフォーカスを当てるための無効化
-            few.Closed += (object sender, EventArgs e) => IsEnabled = true;    // 無効化からの復帰
-        }
-
-        private Window GetParentWindow(FrameworkElement elem)
-        {
-            DependencyObject parent = elem.Parent;
-            if (parent is Window w)
-            {
-                return w;
-            }
-            else if (parent == null)
-            {
-                return null;
-            }
-            else if (parent is FrameworkElement p)
-            {
-                return GetParentWindow(p);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        private void FolderFileListItemKeyDowned(object sender, KeyEventArgs e)
-        {
-            if (IsPurposeDisplayFileMenuWindow(e.SystemKey, e.KeyboardDevice.Modifiers))
-            {
-                // Shift + F10 => エクスプローラーでの右クリックによるメニュー呼び出しと同等機能
-                DisplayFileMenuWindow((ListViewItem)sender);
-            }
-            else if (e.Key == Key.Enter)
-            {
-                Execute((ListViewItem)sender);
-            }
-        }
-
-        private void DisplayFileMenuWindow(ListViewItem selected)
-        {
-            if (selected.Content is ExplorerFileInfo efi)
-            {
-                DisplayFileMenuWindow(efi);
-            }
-        }
-
-        private void Execute(ListViewItem selected)
-        {
-            if (selected.Content is ExplorerFileInfo efi)
-            {
-                if (efi.Name != Common.MoveOneUpFolderString)
-                {
-                    new FileExecuteOpen(1, "開く", efi.FullPath).Execute();
-                }
-            }
-        }
-
-        private bool IsPurposeDisplayFileMenuWindow(Key systemKey, ModifierKeys modifier)
-        {
-            return (systemKey == Key.F10 && modifier == ModifierKeys.Shift);
         }
 
         /// <summary>

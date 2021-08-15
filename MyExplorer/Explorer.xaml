@@ -25,8 +25,9 @@
                   SelectedItem="{Binding SelectedItem}">
             <ListView.Resources>
                 <Style TargetType="{x:Type ListViewItem}">
-                    <EventSetter Event="PreviewMouseRightButtonDown" Handler="DisplayFileMenuWindow"/>
-                    <EventSetter Event="KeyDown" Handler="FolderFileListItemKeyDowned"/>
+                    <EventSetter Event="KeyDown" Handler="KeyDowned"/>
+                    <!--StackPanel 全体の RightButtonDown にすると、取れるのは ListViewItem ではなく TextBlock になってしまった-->
+                    <EventSetter Event="PreviewMouseRightButtonDown" Handler="FolderFileListItemMouseRightButtonClicked"/>
                 </Style>
             </ListView.Resources>
 

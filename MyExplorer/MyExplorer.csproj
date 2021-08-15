@@ -81,10 +81,12 @@
     <Compile Include="Explorer.xaml.cs">
       <DependentUpon>Explorer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ExplorerCommandFileExecute.cs" />
     <Compile Include="ExplorerCommand\ExplorerCommandChangeItemFocus.cs" />
     <Compile Include="ExplorerCommand\ExplorerCommand.cs" />
     <Compile Include="ExplorerCommand\ExplorerCommandBackFolder.cs" />
     <Compile Include="ExplorerCommandFactory.cs" />
+    <Compile Include="ExplorerCommand\ExplorerCommandDisplayFileMenuWindow.cs" />
     <Compile Include="ExplorerCommand\ExplorerCommandForwardFolder.cs" />
     <Compile Include="ExplorerCommand\ExplorerCommandMoveFolder.cs" />
     <Compile Include="ExplorerCommand\ExplorerCommandNone.cs" />

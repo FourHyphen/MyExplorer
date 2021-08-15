@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Windows.Controls;
 
 namespace MyExplorer
 {
@@ -8,9 +9,10 @@ namespace MyExplorer
         /// キーボードイベント
         /// </summary>
         /// <param name="explorer"></param>
+        /// <param name="sender"></param>
         /// <param name="keyEventType"></param>
         /// <returns></returns>
-        public static ExplorerCommand Create(Explorer explorer, Keys.KeyEventType keyEventType)
+        public static ExplorerCommand Create(Explorer explorer, object sender, Keys.KeyEventType keyEventType)
         {
             if (keyEventType == Keys.KeyEventType.EnterKey)
             {
@@ -19,6 +21,15 @@ namespace MyExplorer
             else if (keyEventType == Keys.KeyEventType.Update)
             {
                 return new ExplorerCommandUpdateFolder(explorer);
+            }
+            else if (keyEventType == Keys.KeyEventType.DisplayFileMenuWindow)
+            {
+                if (sender is ListViewItem lvi && lvi.Content is ExplorerFileInfo efi)
+                {
+                    ExplorerCommandDisplayFileMenuWindow command = new ExplorerCommandDisplayFileMenuWindow(explorer);
+                    command.Init(efi);
+                    return command;
+                }
             }
             else if (explorer.IsFocusedItemInFileList())
             {
@@ -60,18 +71,24 @@ namespace MyExplorer
                 {
                     return new ExplorerCommandForwardFolder(explorer);
                 }
+                else if (efi.Name != Common.MoveOneUpFolderString)
+                {
+                    ExplorerCommandFileExecute command = new ExplorerCommandFileExecute(explorer);
+                    command.Init(efi);
+                    return command;
+                }
             }
 
             return new ExplorerCommandNone(explorer);
         }
 
         /// <summary>
-        /// マウスイベントを想定
+        /// 左クリックを想定
         /// </summary>
         /// <param name="explorer"></param>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public static ExplorerCommand Create(Explorer explorer, dynamic obj)
+        public static ExplorerCommand CreateLeftButtonEvent(Explorer explorer, dynamic obj)
         {
             if (DoMouseDownFileList(obj))
             {
@@ -90,6 +107,24 @@ namespace MyExplorer
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// 右クリック時を想定
+        /// </summary>
+        /// <param name="explorer"></param>
+        /// <param name="efi"></param>
+        /// <returns></returns>
+        public static ExplorerCommand CreateRightButtonEvent(Explorer explorer, ExplorerFileInfo efi)
+        {
+            if (efi != null)
+            {
+                ExplorerCommandDisplayFileMenuWindow command = new ExplorerCommandDisplayFileMenuWindow(explorer);
+                command.Init(efi);
+                return command;
+            }
+
+            return new ExplorerCommandNone(explorer);
         }
     }
 }

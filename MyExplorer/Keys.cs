@@ -14,6 +14,7 @@ namespace MyExplorer
             FolderForward,
             EnterKey,
             Update,
+            DisplayFileMenuWindow,
             Else
         }
 
@@ -54,7 +55,10 @@ namespace MyExplorer
             // Shift + 何か
             if (modifier == ModifierKeys.Shift)
             {
-                // nothing
+                if (key == Key.F10)
+                {
+                    return KeyEventType.DisplayFileMenuWindow;
+                }
             }
 
             // Alt + 何か
