@@ -208,16 +208,33 @@ namespace MyExplorer
 
         private void FolderFileListItemKeyDowned(object sender, KeyEventArgs e)
         {
-            // Shift + F10 => エクスプローラーでの右クリックによるメニュー呼び出しと同等機能
-            if (!IsPurposeDisplayFileMenuWindow(e.SystemKey, e.KeyboardDevice.Modifiers))
+            if (IsPurposeDisplayFileMenuWindow(e.SystemKey, e.KeyboardDevice.Modifiers))
             {
-                return;
+                // Shift + F10 => エクスプローラーでの右クリックによるメニュー呼び出しと同等機能
+                DisplayFileMenuWindow((ListViewItem)sender);
             }
+            else if (e.Key == Key.Enter)
+            {
+                Execute((ListViewItem)sender);
+            }
+        }
 
-            ListViewItem selected = (ListViewItem)sender;
+        private void DisplayFileMenuWindow(ListViewItem selected)
+        {
             if (selected.Content is ExplorerFileInfo efi)
             {
                 DisplayFileMenuWindow(efi);
+            }
+        }
+
+        private void Execute(ListViewItem selected)
+        {
+            if (selected.Content is ExplorerFileInfo efi)
+            {
+                if (efi.Name != Common.MoveOneUpFolderString)
+                {
+                    new FileExecuteOpen(1, "開く", efi.FullPath).Execute();
+                }
             }
         }
 
