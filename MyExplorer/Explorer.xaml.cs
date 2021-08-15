@@ -117,6 +117,17 @@ namespace MyExplorer
             DoEventCore(ec);
         }
 
+        private void MouseDoubleClicked(object sender, MouseButtonEventArgs e)
+        {
+            DoMouseDoubleClickEvent();
+        }
+
+        public void DoMouseDoubleClickEvent()
+        {
+            ExplorerCommand ec = ExplorerCommandFactory.CreateDoubleClickEvent(this);
+            DoEventCore(ec);
+        }
+
         private void FolderFileListItemMouseRightButtonClicked(object sender, MouseButtonEventArgs e)
         {
             FolderFileListItemMouseRightButtonClicked((ExplorerFileInfo)FolderFileList.SelectedItem);

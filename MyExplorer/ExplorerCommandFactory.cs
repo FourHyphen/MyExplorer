@@ -110,6 +110,16 @@ namespace MyExplorer
         }
 
         /// <summary>
+        /// ダブルクリック時を想定
+        /// </summary>
+        /// <param name="explorer"></param>
+        /// <returns></returns>
+        public static ExplorerCommand CreateDoubleClickEvent(Explorer explorer)
+        {
+            return CreateEnterKeyEvent(explorer);
+        }
+
+        /// <summary>
         /// 右クリック時を想定
         /// </summary>
         /// <param name="explorer"></param>
