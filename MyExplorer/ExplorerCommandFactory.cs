@@ -24,6 +24,12 @@ namespace MyExplorer
             }
             else if (keyEventType == Keys.KeyEventType.DisplayFileMenuWindow)
             {
+                if (explorer.SelectedItem == null)
+                {
+                    // ファイルリストのフォーカス外してる場合(1行が青くなってない場合)は何もしない
+                    return new ExplorerCommandNone(explorer);
+                }
+
                 if (sender is ListViewItem lvi && lvi.Content is ExplorerFileInfo efi)
                 {
                     ExplorerCommandDisplayFileMenuWindow command = new ExplorerCommandDisplayFileMenuWindow(explorer);
@@ -54,6 +60,12 @@ namespace MyExplorer
             }
             else
             {
+                if (explorer.SelectedItem == null)
+                {
+                    // ファイルリストのフォーカス外してる場合(1行が青くなってない場合)はエンターキーでも何もしない
+                    return new ExplorerCommandNone(explorer);
+                }
+
                 ListViewItem top = explorer.GetListViewItem(Common.MoveOneUpFolderString);
                 if (top.IsFocused)
                 {
