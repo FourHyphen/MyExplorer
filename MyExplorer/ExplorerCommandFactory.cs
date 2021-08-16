@@ -18,26 +18,27 @@ namespace MyExplorer
             {
                 return CreateEnterKeyEvent(explorer);
             }
-            else if (keyEventType == Keys.KeyEventType.Update)
+
+            if (keyEventType == Keys.KeyEventType.Update)
             {
                 return new ExplorerCommandUpdateFolder(explorer);
             }
-            else if (keyEventType == Keys.KeyEventType.DisplayFileMenuWindow)
-            {
-                if (explorer.SelectedItem == null)
-                {
-                    // ファイルリストのフォーカス外してる場合(1行が青くなってない場合)は何もしない
-                    return new ExplorerCommandNone(explorer);
-                }
 
-                if (sender is ListViewItem lvi && lvi.Content is ExplorerFileInfo efi)
+            if (keyEventType == Keys.KeyEventType.DisplayFileMenuWindow)
+            {
+                if (DoDisplayFileMenuWindow(sender, explorer, out ExplorerFileInfo efi))
                 {
                     ExplorerCommandDisplayFileMenuWindow command = new ExplorerCommandDisplayFileMenuWindow(explorer);
                     command.Init(efi);
                     return command;
                 }
+                else
+                {
+                    return new ExplorerCommandNone(explorer);
+                }
             }
-            else if (explorer.IsFocusedItemInFileList())
+
+            if (explorer.IsFocusedItemInFileList())
             {
                 if (keyEventType == Keys.KeyEventType.FolderBack)
                 {
@@ -92,6 +93,24 @@ namespace MyExplorer
             }
 
             return new ExplorerCommandNone(explorer);
+        }
+
+        private static bool DoDisplayFileMenuWindow(object sender, Explorer explorer, out ExplorerFileInfo efi)
+        {
+            efi = null;
+            if (explorer.SelectedItem == null)
+            {
+                // ファイルリストのフォーカス外してる場合(1行が青くなってない場合)
+                return false;
+            }
+
+            if (sender is ListViewItem lvi && lvi.Content is ExplorerFileInfo)
+            {
+                efi = (ExplorerFileInfo)lvi.Content;
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>
