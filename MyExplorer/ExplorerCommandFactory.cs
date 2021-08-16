@@ -26,16 +26,7 @@ namespace MyExplorer
 
             if (keyEventType == Keys.KeyEventType.DisplayFileMenuWindow)
             {
-                if (DoDisplayFileMenuWindow(sender, explorer, out ExplorerFileInfo efi))
-                {
-                    ExplorerCommandDisplayFileMenuWindow command = new ExplorerCommandDisplayFileMenuWindow(explorer);
-                    command.Init(efi);
-                    return command;
-                }
-                else
-                {
-                    return new ExplorerCommandNone(explorer);
-                }
+                return CreateDisplayFileMenuWindow(sender, explorer);
             }
 
             if (explorer.IsFocusedItemInFileList())
@@ -59,40 +50,52 @@ namespace MyExplorer
             {
                 return new ExplorerCommandMoveFolder(explorer);
             }
-            else
+
+            if (explorer.SelectedItem == null)
             {
-                if (explorer.SelectedItem == null)
-                {
-                    // ファイルリストのフォーカス外してる場合(1行が青くなってない場合)はエンターキーでも何もしない
-                    return new ExplorerCommandNone(explorer);
-                }
+                // ファイルリストのフォーカス外してる場合(1行が青くなってない場合)はエンターキーでも何もしない
+                return new ExplorerCommandNone(explorer);
+            }
 
-                ListViewItem top = explorer.GetListViewItem(Common.MoveOneUpFolderString);
-                if (top.IsFocused)
-                {
-                    return new ExplorerCommandBackFolder(explorer);
-                }
+            ListViewItem top = explorer.GetListViewItem(Common.MoveOneUpFolderString);
+            if (top.IsFocused)
+            {
+                return new ExplorerCommandBackFolder(explorer);
+            }
 
-                ListViewItem focused = explorer.GetListViewItemFocused();
-                if (focused == null)
-                {
-                    return new ExplorerCommandNone(explorer);
-                }
+            ListViewItem focused = explorer.GetListViewItemFocused();
+            if (focused == null)
+            {
+                return new ExplorerCommandNone(explorer);
+            }
 
-                ExplorerFileInfo efi = (ExplorerFileInfo)focused.Content;
-                if (efi.Type == Common.TypeFolderString)
-                {
-                    return new ExplorerCommandForwardFolder(explorer);
-                }
-                else if (efi.Name != Common.MoveOneUpFolderString)
-                {
-                    ExplorerCommandFileExecute command = new ExplorerCommandFileExecute(explorer);
-                    command.Init(efi);
-                    return command;
-                }
+            ExplorerFileInfo efi = (ExplorerFileInfo)focused.Content;
+            if (efi.Type == Common.TypeFolderString)
+            {
+                return new ExplorerCommandForwardFolder(explorer);
+            }
+            else if (efi.Name != Common.MoveOneUpFolderString)
+            {
+                ExplorerCommandFileExecute command = new ExplorerCommandFileExecute(explorer);
+                command.Init(efi);
+                return command;
             }
 
             return new ExplorerCommandNone(explorer);
+        }
+
+        private static ExplorerCommand CreateDisplayFileMenuWindow(object sender, Explorer explorer)
+        {
+            if (DoDisplayFileMenuWindow(sender, explorer, out ExplorerFileInfo efi))
+            {
+                ExplorerCommandDisplayFileMenuWindow command = new ExplorerCommandDisplayFileMenuWindow(explorer);
+                command.Init(efi);
+                return command;
+            }
+            else
+            {
+                return new ExplorerCommandNone(explorer);
+            }
         }
 
         private static bool DoDisplayFileMenuWindow(object sender, Explorer explorer, out ExplorerFileInfo efi)

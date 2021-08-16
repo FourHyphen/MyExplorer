@@ -85,5 +85,31 @@ namespace TestMyExplorer
             Assert.IsTrue(fmw.FileExecutes.Find(s => s.Name.Contains("開く")) != null);
             Assert.IsTrue(fmw.FileExecutes.Find(s => s.Name.Contains("プログラムから開く")) != null);
         }
+
+        [TestMethod]
+        public void CreateExplorerCommand()
+        {
+            // UIElement の現状を取得するのは不可能なので、見た目以外の入力で決定する Command のクラスを確認する
+            string folderPath = Common.GetFilePathOfDependentEnvironment(@"./TestData/Folder1");
+            Explorer explorer = new Explorer(folderPath);
+            ExplorerCommand ec;
+
+            // エンターキー
+            explorer.SelectedItem = null;
+            ec = ExplorerCommandFactory.Create(explorer, null, Keys.KeyEventType.EnterKey);
+            Assert.IsTrue(ec is ExplorerCommandNone);
+
+            // F5 キー
+            ec = ExplorerCommandFactory.Create(explorer, null, Keys.KeyEventType.Update);
+            Assert.IsTrue(ec is ExplorerCommandUpdateFolder);
+
+            // 右クリック
+            ec = ExplorerCommandFactory.CreateRightButtonEvent(explorer, null);
+            Assert.IsTrue(ec is ExplorerCommandNone);
+
+            ExplorerFileInfo efi = new ExplorerFileInfo(System.IO.Path.Combine(folderPath, "test11.txt"));
+            ec = ExplorerCommandFactory.CreateRightButtonEvent(explorer, efi);
+            Assert.IsTrue(ec is ExplorerCommandDisplayFileMenuWindow);
+        }
     }
 }
