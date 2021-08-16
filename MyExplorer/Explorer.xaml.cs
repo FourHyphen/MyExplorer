@@ -230,8 +230,11 @@ namespace MyExplorer
             ListViewItem selected = GetListViewItem(fileName);
             if (selected != null)
             {
+                SelectedItem = Data.FileList.Find(s => s.Name == fileName);
                 Keyboard.Focus(selected);
                 selected.Focus();
+                NotifyPropertyChanged(nameof(Data));
+                NotifyPropertyChanged(nameof(SelectedItem));
             }
         }
     }

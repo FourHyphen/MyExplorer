@@ -193,5 +193,23 @@ namespace TestMyExplorer
         {
             System.IO.Directory.CreateDirectory(folderPath);
         }
+
+        [TestMethod]
+        public void ForwardFolderByInputKey()
+        {
+            // キー入力によるフォルダの中への移動(1 階層潜る)
+            string folderPath = Common.GetFilePathOfDependentEnvironment(@".\TestData");
+            Driver.OpenFolder(folderPath);
+
+            // フォルダのフォーカス中にフォルダを移動する
+            Driver.FocusFile("Folder1");
+            Driver.EmurateKey(System.Windows.Input.Key.Right, System.Windows.Input.ModifierKeys.None);
+            Assert.IsTrue(Driver.GetFolderPath().Contains(@"TestData\Folder1"));
+
+            // ファイルのフォーカス中はフォルダ移動しない
+            Driver.FocusFile("test11.txt");
+            Driver.EmurateKey(System.Windows.Input.Key.Right, System.Windows.Input.ModifierKeys.None);
+            Assert.IsFalse(Driver.GetFolderPath().Contains(@"TestData\Folder1\"));
+        }
     }
 }
