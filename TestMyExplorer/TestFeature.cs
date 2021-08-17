@@ -86,6 +86,8 @@ namespace TestMyExplorer
             Assert.IsFalse(Driver.GetFolderPath().Contains(@"\TestData\Folder1"));
             Assert.IsTrue(Driver.ContainFile("Folder1"));
             Assert.IsTrue(Driver.ContainFile("Folder2"));
+
+            // TODO: (←)のエンターキー押下にて 1 階層上に移動する機能のテストを実装;
         }
 
         [TestMethod]
