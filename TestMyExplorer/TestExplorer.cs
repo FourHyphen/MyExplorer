@@ -96,11 +96,11 @@ namespace TestMyExplorer
 
             // エンターキー
             explorer.SelectedItem = null;
-            ec = ExplorerCommandFactory.Create(explorer, null, Keys.KeyEventType.EnterKey);
+            ec = ExplorerCommandFactory.Create(explorer, Keys.KeyEventType.EnterKey);
             Assert.IsTrue(ec is ExplorerCommandNone);
 
             // F5 キー
-            ec = ExplorerCommandFactory.Create(explorer, null, Keys.KeyEventType.Update);
+            ec = ExplorerCommandFactory.Create(explorer, Keys.KeyEventType.Update);
             Assert.IsTrue(ec is ExplorerCommandUpdateFolder);
 
             // 右クリック

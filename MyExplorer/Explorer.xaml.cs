@@ -81,21 +81,21 @@ namespace MyExplorer
 
         private void KeyDowned(object sender, KeyEventArgs e)
         {
-            KeyDowned(sender, e.Key, e.SystemKey, e.KeyboardDevice.Modifiers);
+            KeyDowned(e.Key, e.SystemKey, e.KeyboardDevice.Modifiers);
         }
 
-        private void KeyDowned(object sender, Key key, Key systemKey, ModifierKeys modifier)
+        private void KeyDowned(Key key, Key systemKey, ModifierKeys modifier)
         {
             Keys.KeyEventType keyEventType = Keys.ToKeyEventType(key, systemKey, modifier);
             if (keyEventType != Keys.KeyEventType.Else)
             {
-                DoKeyEvent(sender, keyEventType);
+                DoKeyEvent(keyEventType);
             }
         }
 
-        public void DoKeyEvent(object sender, Keys.KeyEventType keyEventType)
+        public void DoKeyEvent(Keys.KeyEventType keyEventType)
         {
-            ExplorerCommand ec = ExplorerCommandFactory.Create(this, sender, keyEventType);
+            ExplorerCommand ec = ExplorerCommandFactory.Create(this, keyEventType);
             DoEventCore(ec);
         }
 

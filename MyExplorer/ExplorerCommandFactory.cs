@@ -9,10 +9,9 @@ namespace MyExplorer
         /// キーボードイベント
         /// </summary>
         /// <param name="explorer"></param>
-        /// <param name="sender"></param>
         /// <param name="keyEventType"></param>
         /// <returns></returns>
-        public static ExplorerCommand Create(Explorer explorer, object sender, Keys.KeyEventType keyEventType)
+        public static ExplorerCommand Create(Explorer explorer, Keys.KeyEventType keyEventType)
         {
             if (keyEventType == Keys.KeyEventType.EnterKey)
             {
@@ -26,7 +25,7 @@ namespace MyExplorer
 
             if (keyEventType == Keys.KeyEventType.DisplayFileMenuWindow)
             {
-                return CreateDisplayFileMenuWindow(sender, explorer);
+                return CreateDisplayFileMenuWindow(explorer);
             }
 
             if (explorer.IsFocusedItemInFileList())
@@ -84,9 +83,9 @@ namespace MyExplorer
             return new ExplorerCommandNone(explorer);
         }
 
-        private static ExplorerCommand CreateDisplayFileMenuWindow(object sender, Explorer explorer)
+        private static ExplorerCommand CreateDisplayFileMenuWindow(Explorer explorer)
         {
-            if (DoDisplayFileMenuWindow(sender, explorer, out ExplorerFileInfo efi))
+            if (DoDisplayFileMenuWindow(explorer, out ExplorerFileInfo efi))
             {
                 ExplorerCommandDisplayFileMenuWindow command = new ExplorerCommandDisplayFileMenuWindow(explorer);
                 command.Init(efi);
@@ -98,7 +97,7 @@ namespace MyExplorer
             }
         }
 
-        private static bool DoDisplayFileMenuWindow(object sender, Explorer explorer, out ExplorerFileInfo efi)
+        private static bool DoDisplayFileMenuWindow(Explorer explorer, out ExplorerFileInfo efi)
         {
             efi = null;
             if (explorer.SelectedItem == null)
@@ -107,9 +106,9 @@ namespace MyExplorer
                 return false;
             }
 
-            if (sender is ListViewItem lvi && lvi.Content is ExplorerFileInfo)
+            if (explorer.SelectedItem is ExplorerFileInfo)
             {
-                efi = (ExplorerFileInfo)lvi.Content;
+                efi = (ExplorerFileInfo)explorer.SelectedItem;
                 return true;
             }
 
