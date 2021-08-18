@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Codeer.Friendly.Dynamic;
 using Codeer.Friendly.Windows;
+using Codeer.Friendly.Windows.Grasp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TestMyExplorer
@@ -212,6 +213,21 @@ namespace TestMyExplorer
             Driver.FocusFile("test11.txt");
             Driver.EmurateKey(System.Windows.Input.Key.Right, System.Windows.Input.ModifierKeys.None);
             Assert.IsFalse(Driver.GetFolderPath().Contains(@"TestData\Folder1\"));
+        }
+
+        [TestMethod]
+        public void DisplayFileMenuWindow()
+        {
+            // ファイルメニュー画面表示機能のテスト
+            string folderPath = Common.GetFilePathOfDependentEnvironment(@".\TestData\Folder1");
+            string fileName = "text11.txt";
+            Driver.OpenFolder(folderPath);
+            Driver.FocusFile(fileName);
+            Driver.EmurateKey(System.Windows.Input.Key.F10, System.Windows.Input.ModifierKeys.Shift);
+
+            WindowControl window = WindowControl.IdentifyFromWindowText(App, "FileMenuWindow");
+            //window.AppVar.Dynamic().Execute(fe);    // private メソッドを実行する場合
+            window.Close();
         }
     }
 }
