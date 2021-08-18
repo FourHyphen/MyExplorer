@@ -233,5 +233,33 @@ namespace TestMyExplorer
             //window.AppVar.Dynamic().Execute(fe);    // private メソッドを実行する場合
             window.Close();
         }
+
+        [TestMethod]
+        public void ZipFromFileMenuWindow()
+        {
+            // ファイルメニューから zip 圧縮するテスト
+            // 準備
+            string folderPath = Common.GetFilePathOfDependentEnvironment(@".\TestData\Folder1");
+            string zipName = "text11.txt.zip";
+            string zipPath = System.IO.Path.Combine(folderPath, zipName);
+            DeleteFile(zipPath);
+
+            // ファイルメニュー画面表示
+            string fileName = "text11.txt";
+            Driver.OpenFolder(folderPath);
+            Driver.FocusFile(fileName);
+            Driver.EmurateKey(System.Windows.Input.Key.F10, System.Windows.Input.ModifierKeys.Shift);
+            Assert.IsFalse(Driver.ContainFile(zipName));
+
+            // zip 圧縮指示
+            Driver.EmurateKey(System.Windows.Input.Key.D3, System.Windows.Input.ModifierKeys.None);
+
+            // ファイル確認
+            Driver.EmurateKey(System.Windows.Input.Key.F5, System.Windows.Input.ModifierKeys.None);
+            Assert.IsTrue(Driver.ContainFile(zipName));
+
+            // 後始末
+            DeleteFile(zipPath);
+        }
     }
 }
