@@ -25,6 +25,7 @@ namespace MyExplorer
             FileExecutes.Add(new FileExecuteOpen(1, "開く", filePath));
             FileExecutes.Add(new FileExecuteShowProgram(2, "プログラムから開く", filePath));
             FileExecutes.Add(new FileExecuteZip(3, "zip圧縮", filePath));
+            FileExecutes.Add(new FileExecuteSetClipboard(4, "パスコピー", filePath));
         }
 
         public void SetFocus()

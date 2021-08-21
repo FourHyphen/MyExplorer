@@ -97,6 +97,7 @@
     <Compile Include="ExplorerFileInfo.cs" />
     <Compile Include="FileExecute.cs" />
     <Compile Include="FileExecuteOpen.cs" />
+    <Compile Include="FileExecuteSetClipboard.cs" />
     <Compile Include="FileExecuteShowProgram.cs" />
     <Compile Include="FileExecuteZip.cs" />
     <Compile Include="FileMenuWindow.xaml.cs">
