@@ -287,5 +287,56 @@ namespace TestMyExplorer
             string clipboard = System.Windows.Clipboard.GetText();
             Assert.AreEqual(expected: expected, actual: clipboard);
         }
+
+        [TestMethod]
+        public void DeleteFile()
+        {
+            // 準備: 削除するファイルを作成
+            string folderPath = Common.GetFilePathOfDependentEnvironment(@".\TestData\Folder1");
+            string testFileName = "deletetest_" + CreateGuid() + ".txt";
+            string testFilePath = System.IO.Path.Combine(folderPath, testFileName);
+            DeleteFile(testFilePath);
+            CreateFile(testFilePath);
+
+            // 準備: 削除するフォルダを作成
+            string testFolderName = "deletefolder_" + CreateGuid();
+            string testFolderPath = System.IO.Path.Combine(folderPath, testFolderName);
+            DeleteFolder(testFolderPath);
+            CreateFolder(testFolderPath);
+
+            Driver.OpenFolder(folderPath);
+
+            // ファイルの削除
+            TestDeleteCore(testFileName, testFilePath, System.IO.File.Exists);
+
+            // フォルダの削除
+            TestDeleteCore(testFolderName, testFolderPath, System.IO.Directory.Exists);
+        }
+
+        private string CreateGuid()
+        {
+            return System.Guid.NewGuid().ToString("N");
+        }
+
+        private void TestDeleteCore(string name, string path, Func<string, bool> func)
+        {
+            // 準備: ごみ箱に存在しないこと
+            string trashPath = @"c:\$Recycle.Bin\ごみ箱";
+            string trashFullPath = System.IO.Path.Combine(trashPath, name);
+            Assert.IsFalse(func(trashFullPath));
+
+            Driver.FocusFile(name);
+            Assert.IsTrue(Driver.ContainFile(name));
+            Assert.IsTrue(func(path));
+            Driver.EmurateKey(Key.F10, ModifierKeys.Shift);
+
+            // 存在しないことの確認
+            new FileMenuWindowDriver(App).Delete();
+            Assert.IsFalse(Driver.ContainFile(name));
+            Assert.IsFalse(func(path));
+
+            // ゴミ箱には存在することの確認
+            Assert.IsTrue(func(trashFullPath));
+        }
     }
 }

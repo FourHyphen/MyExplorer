@@ -32,6 +32,11 @@ namespace TestMyExplorer
             Execute(System.Windows.Input.Key.D4);
         }
 
+        internal void Delete()
+        {
+            Execute(System.Windows.Input.Key.D5);
+        }
+
         private void Execute(System.Windows.Input.Key key)
         {
             UpdateWindow();
