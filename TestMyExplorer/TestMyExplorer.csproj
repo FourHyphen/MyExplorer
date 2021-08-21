@@ -91,6 +91,7 @@
     <Compile Include="Common.cs" />
     <Compile Include="DisplayControl.cs" />
     <Compile Include="FileListAdapter.cs" />
+    <Compile Include="FileMenuWindowDriver.cs" />
     <Compile Include="MainWindowDriver.cs" />
     <Compile Include="TestExplorer.cs" />
     <Compile Include="TestFeature.cs" />

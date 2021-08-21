@@ -268,6 +268,7 @@ namespace TestMyExplorer
         {
             // クリップボードにファイルパスを出力する
             // 準備
+            FileMenuWindowDriver fileMenuWindowDriver = new FileMenuWindowDriver(App);
             System.Windows.Clipboard.SetText("");
 
             // ファイルのパスコピー
@@ -277,9 +278,7 @@ namespace TestMyExplorer
             Driver.FocusFile(fileName);
             Driver.EmurateKey(System.Windows.Input.Key.F10, System.Windows.Input.ModifierKeys.Shift);
 
-            // パスコピー指示
-            WindowControl window = WindowControl.IdentifyFromWindowText(App, "FileMenuWindow");
-            window.AppVar.Dynamic().WindowKeyDowned(System.Windows.Input.Key.D4);
+            fileMenuWindowDriver.PathCopy();
 
             AssertAreEqualClipboard(System.IO.Path.Combine(folderPath, fileName));
 
@@ -290,8 +289,7 @@ namespace TestMyExplorer
             Driver.EmurateKey(System.Windows.Input.Key.F10, System.Windows.Input.ModifierKeys.Shift);
 
             // パスコピー指示
-            window = WindowControl.IdentifyFromWindowText(App, "FileMenuWindow");
-            window.AppVar.Dynamic().WindowKeyDowned(System.Windows.Input.Key.D4);
+            fileMenuWindowDriver.PathCopy();
 
             AssertAreEqualClipboard(System.IO.Path.Combine(folderPath, fileName));
         }
