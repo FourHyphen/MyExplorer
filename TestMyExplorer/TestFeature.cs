@@ -240,7 +240,7 @@ namespace TestMyExplorer
             // ファイルメニューから zip 圧縮するテスト
             // 準備
             string folderPath = Common.GetFilePathOfDependentEnvironment(@".\TestData\Folder1");
-            string zipName = "text11.txt.zip";
+            string zipName = "text11.zip";
             string zipPath = System.IO.Path.Combine(folderPath, zipName);
             DeleteFile(zipPath);
 
@@ -252,7 +252,8 @@ namespace TestMyExplorer
             Assert.IsFalse(Driver.ContainFile(zipName));
 
             // zip 圧縮指示
-            Driver.EmurateKey(System.Windows.Input.Key.D3, System.Windows.Input.ModifierKeys.None);
+            WindowControl window = WindowControl.IdentifyFromWindowText(App, "FileMenuWindow");
+            window.AppVar.Dynamic().WindowKeyDowned(System.Windows.Input.Key.D3);
 
             // ファイル確認
             Driver.EmurateKey(System.Windows.Input.Key.F5, System.Windows.Input.ModifierKeys.None);

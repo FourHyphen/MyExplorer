@@ -30,7 +30,16 @@ namespace MyExplorer
             few.Show();
             few.SetFocus();
             Explorer.IsEnabled = false;    // FileMenuWindow に最初からキーボードフォーカスを当てるための無効化
-            few.Closed += (object sender, EventArgs e) => Explorer.IsEnabled = true;    // 無効化からの復帰
+            few.Closed += Few_Closed;
+        }
+
+        private void Few_Closed(object sender, EventArgs e)
+        {
+            Explorer.IsEnabled = true;    // 無効化からの復帰
+
+            // ウィンドウ閉じただけだとフォーカスは宙ぶらりんになったので明示的に指定
+            Explorer.FolderFileList.Focus();
+            System.Windows.Input.Keyboard.Focus(Explorer.FolderFileList);
         }
 
         private Window GetParentWindow(FrameworkElement elem)

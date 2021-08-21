@@ -24,7 +24,7 @@ namespace MyExplorer
             FileExecutes = new List<FileExecute>();
             FileExecutes.Add(new FileExecuteOpen(1, "開く", filePath));
             FileExecutes.Add(new FileExecuteShowProgram(2, "プログラムから開く", filePath));
-            //FileExecutes.Add(new FileExecuteZip("zip圧縮", filePath);
+            FileExecutes.Add(new FileExecuteZip(3, "zip圧縮", filePath));
         }
 
         public void SetFocus()
@@ -44,7 +44,12 @@ namespace MyExplorer
 
         private void WindowKeyDowned(object sender, KeyEventArgs e)
         {
-            int? num = ToInt(e.Key);
+            WindowKeyDowned(e.Key);
+        }
+
+        private void WindowKeyDowned(Key key)
+        {
+            int? num = ToInt(key);
             if (num != null)
             {
                 Execute(FileExecutes[(int)num - 1]);    // 1 始まりを 0 始まりに変換

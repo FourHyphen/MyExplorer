@@ -42,6 +42,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -96,6 +98,7 @@
     <Compile Include="FileExecute.cs" />
     <Compile Include="FileExecuteOpen.cs" />
     <Compile Include="FileExecuteShowProgram.cs" />
+    <Compile Include="FileExecuteZip.cs" />
     <Compile Include="FileMenuWindow.xaml.cs">
       <DependentUpon>FileMenuWindow.xaml</DependentUpon>
     </Compile>
