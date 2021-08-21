@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using Codeer.Friendly.Dynamic;
+using System.Windows.Input;
 using Codeer.Friendly.Windows;
-using Codeer.Friendly.Windows.Grasp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TestMyExplorer
@@ -71,26 +69,26 @@ namespace TestMyExplorer
         public void BackFolderPathByKey()
         {
             // 左キーによる現在フォルダから 1 階層上への移動
-            System.Windows.Input.ModifierKeys modifierNone = System.Windows.Input.ModifierKeys.None;
+            ModifierKeys modifierNone = ModifierKeys.None;
 
             string folderPath = Common.GetFilePathOfDependentEnvironment(@".\TestData\Folder1");
             Driver.OpenFolder(folderPath);
 
             // フォーカスが TextBox に当たっている場合はフォルダ移動しない
             Driver.FocusFolderPathArea();
-            Driver.EmurateKey(System.Windows.Input.Key.Left, modifierNone);
+            Driver.EmurateKey(Key.Left, modifierNone);
             Assert.IsTrue(Driver.GetFolderPath().Contains(@"\TestData\Folder1"));
 
             // 1 階層上に上る
             Driver.FocusFile("text11.txt");
-            Driver.EmurateKey(System.Windows.Input.Key.Left, modifierNone);
+            Driver.EmurateKey(Key.Left, modifierNone);
             Assert.IsFalse(Driver.GetFolderPath().Contains(@"\TestData\Folder1"));
             Assert.IsTrue(Driver.ContainFile("Folder1"));
             Assert.IsTrue(Driver.ContainFile("Folder2"));
 
             // (←)のエンターキー押下にて 1 階層上に移動する
             Driver.FocusFile(MyExplorer.Common.MoveOneUpFolderString);
-            Driver.EmurateKey(System.Windows.Input.Key.Enter, modifierNone);
+            Driver.EmurateKey(Key.Enter, modifierNone);
             Assert.IsFalse(Driver.GetFolderPath().Contains(@"\TestData"));
             Assert.IsTrue(Driver.ContainFile("TestData"));
         }
@@ -108,13 +106,13 @@ namespace TestMyExplorer
             Driver.SetFolderPathText(toPath);
 
             // エンターキー
-            Driver.EmurateKey(System.Windows.Input.Key.Enter, System.Windows.Input.ModifierKeys.None);
+            Driver.EmurateKey(Key.Enter, ModifierKeys.None);
             Assert.IsTrue(Driver.GetFolderPath().Contains(@"\TestData\Folder2"));
             Assert.IsTrue(Driver.ContainFile("text21.txt"));
 
             // 存在しないフォルダへは移動せず、画面は変化しない
             Driver.SetFolderPathText("NOT_EXIST");
-            Driver.EmurateKey(System.Windows.Input.Key.Enter, System.Windows.Input.ModifierKeys.None);
+            Driver.EmurateKey(Key.Enter, ModifierKeys.None);
             Assert.IsTrue(Driver.GetFolderPath().Contains(@"NOT_EXIST"));
             Assert.IsTrue(Driver.ContainFile("text21.txt"));
         }
@@ -138,7 +136,7 @@ namespace TestMyExplorer
             Assert.IsFalse(Driver.ContainFile(testFileName));
 
             // F5 キーによって状態更新され、作成したファイルが表示される
-            Driver.EmurateKey(System.Windows.Input.Key.F5, System.Windows.Input.ModifierKeys.None);
+            Driver.EmurateKey(Key.F5, ModifierKeys.None);
             Assert.IsTrue(Driver.ContainFile(testFileName));
 
             // 後始末
@@ -180,7 +178,7 @@ namespace TestMyExplorer
             CreateFile(testFilePath);
 
             // フォルダ内にファイルが作成され、状態更新後でも 1 階層上に上るアイコンは表示される
-            Driver.EmurateKey(System.Windows.Input.Key.F5, System.Windows.Input.ModifierKeys.None);
+            Driver.EmurateKey(Key.F5, ModifierKeys.None);
             Assert.IsTrue(Driver.ContainFile(Common.GoBackString));
             Assert.IsTrue(Driver.ContainFile(testFileName));
 
@@ -210,12 +208,12 @@ namespace TestMyExplorer
 
             // フォルダのフォーカス中にフォルダを移動する
             Driver.FocusFile("Folder1");
-            Driver.EmurateKey(System.Windows.Input.Key.Right, System.Windows.Input.ModifierKeys.None);
+            Driver.EmurateKey(Key.Right, ModifierKeys.None);
             Assert.IsTrue(Driver.GetFolderPath().Contains(@"TestData\Folder1"));
 
             // ファイルのフォーカス中はフォルダ移動しない
             Driver.FocusFile("test11.txt");
-            Driver.EmurateKey(System.Windows.Input.Key.Right, System.Windows.Input.ModifierKeys.None);
+            Driver.EmurateKey(Key.Right, ModifierKeys.None);
             Assert.IsFalse(Driver.GetFolderPath().Contains(@"TestData\Folder1\"));
         }
 
@@ -227,7 +225,7 @@ namespace TestMyExplorer
             string fileName = "text11.txt";
             Driver.OpenFolder(folderPath);
             Driver.FocusFile(fileName);
-            Driver.EmurateKey(System.Windows.Input.Key.F10, System.Windows.Input.ModifierKeys.Shift);
+            Driver.EmurateKey(Key.F10, ModifierKeys.Shift);
 
             new FileMenuWindowDriver(App).Close();
         }
@@ -246,13 +244,13 @@ namespace TestMyExplorer
             string fileName = "text11.txt";
             Driver.OpenFolder(folderPath);
             Driver.FocusFile(fileName);
-            Driver.EmurateKey(System.Windows.Input.Key.F10, System.Windows.Input.ModifierKeys.Shift);
+            Driver.EmurateKey(Key.F10, ModifierKeys.Shift);
             Assert.IsFalse(Driver.ContainFile(zipName));
 
             new FileMenuWindowDriver(App).Zip();
 
             // ファイル確認
-            Driver.EmurateKey(System.Windows.Input.Key.F5, System.Windows.Input.ModifierKeys.None);
+            Driver.EmurateKey(Key.F5, ModifierKeys.None);
             Assert.IsTrue(Driver.ContainFile(zipName));
 
             // 後始末
@@ -272,7 +270,7 @@ namespace TestMyExplorer
             string fileName = "text11.txt";
             Driver.OpenFolder(folderPath);
             Driver.FocusFile(fileName);
-            Driver.EmurateKey(System.Windows.Input.Key.F10, System.Windows.Input.ModifierKeys.Shift);
+            Driver.EmurateKey(Key.F10, ModifierKeys.Shift);
 
             fileMenuWindowDriver.PathCopy();
 
@@ -282,7 +280,7 @@ namespace TestMyExplorer
             System.Windows.Clipboard.SetText("");
             fileName = "folder01";
             Driver.FocusFile(fileName);
-            Driver.EmurateKey(System.Windows.Input.Key.F10, System.Windows.Input.ModifierKeys.Shift);
+            Driver.EmurateKey(Key.F10, ModifierKeys.Shift);
 
             // パスコピー指示
             fileMenuWindowDriver.PathCopy();
