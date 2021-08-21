@@ -130,6 +130,17 @@ namespace MyExplorer
 
         private void FolderFileListItemMouseRightButtonClicked(object sender, MouseButtonEventArgs e)
         {
+            // ファイル選択中に別ファイルに対して右クリックした際、選択中ファイルを変える
+            if (sender is ListViewItem lvi && lvi.Content is ExplorerFileInfo eventItem)
+            {
+                ExplorerFileInfo now = (ExplorerFileInfo)FolderFileList.SelectedItem;
+                if (eventItem.Name != now.Name)
+                {
+                    SelectedItem = eventItem;
+                    NotifyPropertyChanged(nameof(SelectedItem));
+                }
+            }
+
             FolderFileListItemMouseRightButtonClicked((ExplorerFileInfo)FolderFileList.SelectedItem);
         }
 
