@@ -36,11 +36,11 @@ namespace MyExplorer
                 SetFocusFolderFileList();
                 IsSelectedItemChanged = true;
             }
-            else if (Explorer.SelectedItem is string itemString)
+            else if (Explorer.SelectedItem is ExplorerFileInfo efi)
             {
                 // 選択されている状態でフォーカスが ListView から外れ、再度 ListView にフォーカス当たった場合にここを通る
                 // この場合はファイルにフォーカスを当てなおす
-                ListViewItem item = Explorer.GetListViewItem(itemString);
+                ListViewItem item = Explorer.GetListViewItem(efi.Name);
                 if (item != null)
                 {
                     SetFocusFile(item);
