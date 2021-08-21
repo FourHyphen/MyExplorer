@@ -166,7 +166,6 @@ namespace TestMyExplorer
 
             // 準備
             DeleteFolder(testFolderPath);
-            CreateFolder(testFolderPath);
 
             // ファイルが 1 つも存在しないフォルダの場合
             CreateFolder(testFolderPath);
@@ -262,28 +261,23 @@ namespace TestMyExplorer
         {
             // クリップボードにファイルパスを出力する
             // 準備
-            FileMenuWindowDriver fileMenuWindowDriver = new FileMenuWindowDriver(App);
             System.Windows.Clipboard.SetText("");
+            string folderPath = Common.GetFilePathOfDependentEnvironment(@".\TestData\Folder1");
+            Driver.OpenFolder(folderPath);
 
             // ファイルのパスコピー
-            string folderPath = Common.GetFilePathOfDependentEnvironment(@".\TestData\Folder1");
-            string fileName = "text11.txt";
-            Driver.OpenFolder(folderPath);
-            Driver.FocusFile(fileName);
-            Driver.EmurateKey(Key.F10, ModifierKeys.Shift);
-
-            fileMenuWindowDriver.PathCopy();
-
-            AssertAreEqualClipboard(System.IO.Path.Combine(folderPath, fileName));
+            CopyPathForClipboardCore(folderPath, "text11.txt");
 
             // フォルダのパスコピー
-            System.Windows.Clipboard.SetText("");
-            fileName = "folder01";
+            CopyPathForClipboardCore(folderPath, "folder01");
+        }
+
+        private void CopyPathForClipboardCore(string folderPath, string fileName)
+        {
             Driver.FocusFile(fileName);
             Driver.EmurateKey(Key.F10, ModifierKeys.Shift);
 
-            // パスコピー指示
-            fileMenuWindowDriver.PathCopy();
+            new FileMenuWindowDriver(App).PathCopy();
 
             AssertAreEqualClipboard(System.IO.Path.Combine(folderPath, fileName));
         }
