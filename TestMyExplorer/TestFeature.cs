@@ -262,5 +262,44 @@ namespace TestMyExplorer
             // 後始末
             DeleteFile(zipPath);
         }
+
+        [TestMethod]
+        public void CopyPathForClipboard()
+        {
+            // クリップボードにファイルパスを出力する
+            // 準備
+            System.Windows.Clipboard.SetText("");
+
+            // ファイルのパスコピー
+            string folderPath = Common.GetFilePathOfDependentEnvironment(@".\TestData\Folder1");
+            string fileName = "text11.txt";
+            Driver.OpenFolder(folderPath);
+            Driver.FocusFile(fileName);
+            Driver.EmurateKey(System.Windows.Input.Key.F10, System.Windows.Input.ModifierKeys.Shift);
+
+            // パスコピー指示
+            WindowControl window = WindowControl.IdentifyFromWindowText(App, "FileMenuWindow");
+            window.AppVar.Dynamic().WindowKeyDowned(System.Windows.Input.Key.D4);
+
+            AssertAreEqualClipboard(System.IO.Path.Combine(folderPath, fileName));
+
+            // フォルダのパスコピー
+            System.Windows.Clipboard.SetText("");
+            fileName = "folder01";
+            Driver.FocusFile(fileName);
+            Driver.EmurateKey(System.Windows.Input.Key.F10, System.Windows.Input.ModifierKeys.Shift);
+
+            // パスコピー指示
+            window = WindowControl.IdentifyFromWindowText(App, "FileMenuWindow");
+            window.AppVar.Dynamic().WindowKeyDowned(System.Windows.Input.Key.D4);
+
+            AssertAreEqualClipboard(System.IO.Path.Combine(folderPath, fileName));
+        }
+
+        private void AssertAreEqualClipboard(string expected)
+        {
+            string clipboard = System.Windows.Clipboard.GetText();
+            Assert.AreEqual(expected: expected, actual: clipboard);
+        }
     }
 }
