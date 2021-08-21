@@ -229,9 +229,7 @@ namespace TestMyExplorer
             Driver.FocusFile(fileName);
             Driver.EmurateKey(System.Windows.Input.Key.F10, System.Windows.Input.ModifierKeys.Shift);
 
-            WindowControl window = WindowControl.IdentifyFromWindowText(App, "FileMenuWindow");
-            //window.AppVar.Dynamic().Execute(fe);    // private メソッドを実行する場合
-            window.Close();
+            new FileMenuWindowDriver(App).Close();
         }
 
         [TestMethod]
@@ -251,9 +249,7 @@ namespace TestMyExplorer
             Driver.EmurateKey(System.Windows.Input.Key.F10, System.Windows.Input.ModifierKeys.Shift);
             Assert.IsFalse(Driver.ContainFile(zipName));
 
-            // zip 圧縮指示
-            WindowControl window = WindowControl.IdentifyFromWindowText(App, "FileMenuWindow");
-            window.AppVar.Dynamic().WindowKeyDowned(System.Windows.Input.Key.D3);
+            new FileMenuWindowDriver(App).Zip();
 
             // ファイル確認
             Driver.EmurateKey(System.Windows.Input.Key.F5, System.Windows.Input.ModifierKeys.None);

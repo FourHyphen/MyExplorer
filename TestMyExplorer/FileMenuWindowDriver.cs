@@ -1,6 +1,7 @@
 ﻿using Codeer.Friendly.Dynamic;
 using Codeer.Friendly.Windows;
 using Codeer.Friendly.Windows.Grasp;
+using System;
 
 namespace TestMyExplorer
 {
@@ -13,6 +14,17 @@ namespace TestMyExplorer
         public FileMenuWindowDriver(WindowsAppFriend app)
         {
             App = app;
+        }
+
+        internal void Close()
+        {
+            UpdateWindow();
+            Window.Close();
+        }
+
+        internal void Zip()
+        {
+            Execute(System.Windows.Input.Key.D3);
         }
 
         internal void PathCopy()
