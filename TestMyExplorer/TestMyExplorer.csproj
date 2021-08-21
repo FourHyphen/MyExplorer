@@ -96,6 +96,7 @@
     <Compile Include="TestFeature.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FolderPathAdapter.cs" />
+    <Compile Include="TestFileExecute.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
