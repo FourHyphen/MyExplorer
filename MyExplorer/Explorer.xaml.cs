@@ -134,6 +134,7 @@ namespace MyExplorer
             if (sender is ListViewItem lvi && lvi.Content is ExplorerFileInfo eventItem)
             {
                 ExplorerFileInfo now = (ExplorerFileInfo)FolderFileList.SelectedItem;
+                // TODO: バグ: ファイル無選択の場合、now が null になって null 参照例外起こす
                 if (eventItem.Name != now.Name)
                 {
                     SelectedItem = eventItem;
