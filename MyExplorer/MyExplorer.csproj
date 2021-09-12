@@ -96,6 +96,7 @@
     <Compile Include="ExplorerCommand\ExplorerCommandUpdateFolder.cs" />
     <Compile Include="ExplorerData.cs" />
     <Compile Include="ExplorerDisplay.cs" />
+    <Compile Include="ExplorerEvent.cs" />
     <Compile Include="ExplorerFileInfo.cs" />
     <Compile Include="FileExecute.cs" />
     <Compile Include="FileExecuteSendRecycleBin.cs" />

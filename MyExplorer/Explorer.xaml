@@ -28,7 +28,7 @@
                     <EventSetter Event="KeyDown" Handler="KeyDowned"/>
                     <EventSetter Event="PreviewMouseDoubleClick" Handler="MouseDoubleClicked"/>
                     <!--StackPanel 全体の RightButtonDown にすると、取れるのは ListViewItem ではなく TextBlock になってしまった-->
-                    <EventSetter Event="PreviewMouseRightButtonDown" Handler="FolderFileListItemMouseRightButtonClicked"/>
+                    <EventSetter Event="PreviewMouseRightButtonDown" Handler="MouseRightButtonClickedOfFolderFileListItem"/>
                 </Style>
             </ListView.Resources>
 
