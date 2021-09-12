@@ -45,9 +45,7 @@ namespace MyExplorer
             FileMenuWindow fmw = (FileMenuWindow)sender;
             if (fmw.IsFileChanged)
             {
-                Explorer.Data.Update(out bool isChanged);
-                IsDataChanged = isChanged;
-                Explorer.DataChanged();
+                Explorer.Update();
             }
         }
 

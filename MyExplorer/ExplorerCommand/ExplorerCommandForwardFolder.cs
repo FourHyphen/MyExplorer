@@ -18,11 +18,7 @@ namespace MyExplorer
                 return;
             }
 
-            Explorer.Data.IntoFolder(selectedItem, out bool isStateChanged);
-            if (isStateChanged)
-            {
-                IsDataChanged = true;
-            }
+            Explorer.IntoFolder(selectedItem);
         }
 
         private ExplorerFileInfo GetSelectedItemOfFolderFileList()

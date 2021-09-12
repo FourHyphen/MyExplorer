@@ -12,11 +12,7 @@ namespace MyExplorer
 
         public override void Execute()
         {
-            Explorer.Data.Update(out bool isStateChanged);
-            if (isStateChanged)
-            {
-                IsDataChanged = true;
-            }
+            Explorer.Update();
         }
     }
 }

@@ -13,11 +13,7 @@ namespace MyExplorer
         public override void Execute()
         {
             string input = Explorer.FolderPath.Text;
-            Explorer.Data.MoveFolder(input, out bool isStateChanged);
-            if (isStateChanged)
-            {
-                IsDataChanged = true;
-            }
+            Explorer.MoveFolder(input);
         }
     }
 }

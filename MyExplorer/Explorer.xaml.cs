@@ -138,7 +138,7 @@ namespace MyExplorer
                 if (eventItem.Name != now.Name)
                 {
                     SelectedItem = eventItem;
-                    NotifyPropertyChanged(nameof(SelectedItem));
+                    SelectedItemChanged();
                 }
             }
 
@@ -159,25 +159,58 @@ namespace MyExplorer
         private void DoEventCore(ExplorerCommand ec)
         {
             ec.Execute();
-            if (ec.IsDataChanged)
+        }
+
+        public void MoveFolderOneUp()
+        {
+            Data.MoveFolderOneUp(out bool isStateChanged);
+            if (isStateChanged)
             {
-                NotifyPropertyChanged(nameof(Data));
+                DataChanged();
             }
-            if (ec.IsSelectedItemChanged)
+        }
+
+        public void IntoFolder(ExplorerFileInfo selectedItem)
+        {
+            Data.IntoFolder(selectedItem, out bool isStateChanged);
+            if (isStateChanged)
             {
-                NotifyPropertyChanged(nameof(SelectedItem));
+                DataChanged();
             }
+        }
+
+        public void MoveFolder(string input)
+        {
+            Data.MoveFolder(input, out bool isStateChanged);
+            if (isStateChanged)
+            {
+                DataChanged();
+            }
+        }
+
+        public void Update()
+        {
+            Data.Update(out bool isStateChanged);
+            if (isStateChanged)
+            {
+                DataChanged();
+            }
+        }
+
+        private void DataChanged()
+        {
+            NotifyPropertyChanged(nameof(Data));
+        }
+
+        public void SelectedItemChanged()
+        {
+            NotifyPropertyChanged(nameof(SelectedItem));
         }
 
         private void NotifyPropertyChanged(string name)
         {
             var e = new PropertyChangedEventArgs(name);
             PropertyChanged?.Invoke(this, e);
-        }
-
-        public void DataChanged()
-        {
-            NotifyPropertyChanged(nameof(Data));
         }
 
         public bool IsFocusedItemInFileList()

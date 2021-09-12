@@ -19,7 +19,7 @@ namespace MyExplorer
                 // FileList の Item にフォーカスが当たってる状態で Item でない ListView 領域をクリックするとここを通る
                 // Item の Selected を解除
                 Explorer.SelectedItem = null;
-                IsSelectedItemChanged = true;
+                Explorer.SelectedItemChanged();
             }
             else
             {
@@ -34,7 +34,6 @@ namespace MyExplorer
             {
                 // 真に何も選択されていない場合、FileList フォーカスを当てる
                 SetFocusFolderFileList();
-                IsSelectedItemChanged = true;
             }
             else if (Explorer.SelectedItem is ExplorerFileInfo efi)
             {
@@ -44,7 +43,6 @@ namespace MyExplorer
                 if (item != null)
                 {
                     SetFocusFile(item);
-                    IsSelectedItemChanged = true;
                 }
             }
         }
@@ -53,12 +51,14 @@ namespace MyExplorer
         {
             Keyboard.Focus(Explorer.FolderFileList);
             Explorer.FolderFileList.Focus();
+            Explorer.SelectedItemChanged();
         }
 
         private void SetFocusFile(ListViewItem selected)
         {
             Keyboard.Focus(selected);
             selected.Focus();
+            Explorer.SelectedItemChanged();
         }
     }
 }

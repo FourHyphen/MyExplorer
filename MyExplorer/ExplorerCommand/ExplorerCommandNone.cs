@@ -12,8 +12,7 @@ namespace MyExplorer
 
         public override void Execute()
         {
-            IsDataChanged = false;
-            IsSelectedItemChanged = false;
+            // nothing
         }
     }
 }
