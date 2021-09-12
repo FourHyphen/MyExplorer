@@ -69,12 +69,13 @@ namespace MyExplorer
 
         private void MouseRightButtonClickedPrepare(object sender)
         {
-            // ファイル選択中に別ファイルに対して右クリックした際、選択中ファイルを変える
+            // 以下の場合に、選択中ファイルを今右クリックされた Item に変える
+            // (1) ファイル未選択の場合
+            // (2) ファイル選択中に別ファイルに対して右クリックした場合
             if (sender is ListViewItem lvi && lvi.Content is ExplorerFileInfo eventItem)
             {
                 ExplorerFileInfo now = (ExplorerFileInfo)FolderFileList.SelectedItem;
-                // TODO: バグ: ファイル無選択の場合、now が null になって null 参照例外起こす
-                if (eventItem.Name != now.Name)
+                if (now == null || eventItem.Name != now.Name)
                 {
                     SelectedItem = eventItem;
                     SelectedItemChanged();
