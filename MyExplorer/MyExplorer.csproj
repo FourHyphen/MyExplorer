@@ -98,6 +98,7 @@
     <Compile Include="ExplorerDisplay.cs" />
     <Compile Include="ExplorerEvent.cs" />
     <Compile Include="ExplorerFileInfo.cs" />
+    <Compile Include="ExplorerProcessItemList.cs" />
     <Compile Include="FileExecute.cs" />
     <Compile Include="FileExecuteSendRecycleBin.cs" />
     <Compile Include="FileExecuteOpen.cs" />
