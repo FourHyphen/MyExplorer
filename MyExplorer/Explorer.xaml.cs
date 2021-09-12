@@ -1,29 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.ComponentModel;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace MyExplorer
 {
+    /// <remarks>
+    /// Partial: ExplorerDisplay / ExplorerEvent / ExplorerProcessItemList
+    /// </remarks>
     public partial class Explorer : UserControl, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
         public ExplorerData Data { get; private set; }
-
-        public ExplorerDisplay Display { get; private set; }
 
         public object SelectedItem { get; set; }
 
@@ -38,8 +26,8 @@ namespace MyExplorer
             DataContext = this;
 
             Data = new ExplorerData(folderPath);
-            Display = new ExplorerDisplay((int)main.ActualWidth, (int)main.ActualHeight);
 
+            SetPosition((int)main.ActualWidth, (int)main.ActualHeight);
             main.FoldersArea.Children.Clear();
             main.FoldersArea.Children.Add(this);
         }

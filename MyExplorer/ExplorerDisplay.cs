@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyExplorer
 {
-    public class ExplorerDisplay
+    public partial class Explorer
     {
         public int FolderAreaWidth { get; private set; }
 
@@ -19,11 +19,6 @@ namespace MyExplorer
         public int FolderFileListAreaWidth { get; private set; }
 
         public int FolderFileListAreaHeight { get; private set; }
-
-        public ExplorerDisplay(int mainWindowActualWidth, int mainWindowActualHeight)
-        {
-            SetPosition(mainWindowActualWidth, mainWindowActualHeight);
-        }
 
         private void SetPosition(int mainWindowActualWidth, int mainWindowActualHeight)
         {
