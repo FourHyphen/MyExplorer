@@ -36,9 +36,7 @@ namespace MyExplorer
 
         private void OpenFolder(string folderPath)
         {
-            Explorer = new Explorer(folderPath);
-            Explorer.SetPosition(this);
-            Explorer.Display(FoldersArea.Children);
+            Explorer = new Explorer(folderPath, this);
         }
     }
 }

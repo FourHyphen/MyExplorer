@@ -7,19 +7,19 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <StackPanel x:Name="FolderArea"
-                Width="{Binding FolderAreaWidth}"
-                Height="{Binding FolderAreaHeight}"
+                Width="{Binding Display.FolderAreaWidth}"
+                Height="{Binding Display.FolderAreaHeight}"
                 PreviewKeyDown="KeyDowned"
                 PreviewMouseLeftButtonDown="MouseLeftButtonDownClicked">
         <TextBox x:Name="FolderPath"
                  Text="{Binding Data.FolderPath}"
-                 Width="{Binding FolderPathAreaWidth}"
-                 Height="{Binding FolderPathAreaHeight}"
+                 Width="{Binding Display.FolderPathAreaWidth}"
+                 Height="{Binding Display.FolderPathAreaHeight}"
                  ScrollViewer.HorizontalScrollBarVisibility="Auto"/>
         <ListView x:Name="FolderFileList"
                   ItemsSource="{Binding Data.FileList}"
-                  Width="{Binding FolderFileListAreaWidth}"
-                  Height="{Binding FolderFileListAreaHeight}"
+                  Width="{Binding Display.FolderFileListAreaWidth}"
+                  Height="{Binding Display.FolderFileListAreaHeight}"
                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                   SelectedItem="{Binding SelectedItem}">

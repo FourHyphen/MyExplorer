@@ -26,7 +26,7 @@ namespace TestMyExplorer
         public void CreateExplorer()
         {
             string folderPath = Common.GetFilePathOfDependentEnvironment(@"./TestData/Folder2");
-            Explorer explorer = new Explorer(folderPath);
+            Explorer explorer = new Explorer(folderPath, new MainWindow());
             Assert.IsTrue(explorer.Data.FolderPath.Contains(@"TestData\Folder2"));
 
             // [0] -> 1 階層上に上るアイコン
@@ -91,7 +91,7 @@ namespace TestMyExplorer
         {
             // UIElement の現状を取得するのは不可能なので、見た目以外の入力で決定する Command のクラスを確認する
             string folderPath = Common.GetFilePathOfDependentEnvironment(@"./TestData/Folder1");
-            Explorer explorer = new Explorer(folderPath);
+            Explorer explorer = new Explorer(folderPath, new MainWindow());
             ExplorerCommand ec;
 
             // エンターキー

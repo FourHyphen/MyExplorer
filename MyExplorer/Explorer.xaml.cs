@@ -25,58 +25,21 @@ namespace MyExplorer
 
         public object SelectedItem { get; set; }
 
-        public int FolderAreaWidth { get; private set; }
+        public ExplorerDisplay Display { get; private set; }
 
-        public int FolderAreaHeight { get; private set; }
-
-        public int FolderPathAreaWidth { get; private set; }
-
-        public int FolderPathAreaHeight { get; private set; }
-
-        public int FolderFileListAreaWidth { get; private set; }
-
-        public int FolderFileListAreaHeight { get; private set; }
-
-        public Explorer(string folderPath)
+        public Explorer(string folderPath, MainWindow main)
         {
             InitializeComponent();
-            Init(folderPath);
+            Init(folderPath, main);
         }
 
-        private void Init(string folderPath)
+        private void Init(string folderPath, MainWindow main)
         {
             Data = new ExplorerData(folderPath);
+            Display = new ExplorerDisplay(main);
             DataContext = this;
-        }
-
-        public void SetPosition(MainWindow main)
-        {
-            int scrollBar = 10;                     // 10: 経験則
-            int width = (int)main.ActualWidth - scrollBar;
-            int height = (int)main.ActualHeight - scrollBar - 50;    // 50: 経験則
-
-            SetWidth(width);
-            SetHeight(height);
-        }
-
-        private void SetWidth(int width)
-        {
-            FolderPathAreaWidth = width;
-            FolderFileListAreaWidth = width;
-            FolderAreaWidth = width;
-        }
-
-        private void SetHeight(int height)
-        {
-            FolderPathAreaHeight = 40;
-            FolderFileListAreaHeight = height - FolderPathAreaHeight;
-            FolderAreaHeight = height;
-        }
-
-        public void Display(UIElementCollection collection)
-        {
-            collection.Clear();
-            collection.Add(this);
+            main.FoldersArea.Children.Clear();
+            main.FoldersArea.Children.Add(this);
         }
 
         private void KeyDowned(object sender, KeyEventArgs e)
