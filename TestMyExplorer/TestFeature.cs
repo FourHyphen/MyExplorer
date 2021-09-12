@@ -289,17 +289,18 @@ namespace TestMyExplorer
         }
 
         [TestMethod]
-        public void DeleteFile()
+        public void DeleteFileFromFileMenuWindow()
         {
             // 準備: 削除するファイルを作成
+            string guid = System.Guid.NewGuid().ToString("N");
             string folderPath = Common.GetFilePathOfDependentEnvironment(@".\TestData\Folder1");
-            string testFileName = "deletetest_" + CreateGuid() + ".txt";
+            string testFileName = "deletetest_" + guid + ".txt";
             string testFilePath = System.IO.Path.Combine(folderPath, testFileName);
             DeleteFile(testFilePath);
             CreateFile(testFilePath);
 
             // 準備: 削除するフォルダを作成
-            string testFolderName = "deletefolder_" + CreateGuid();
+            string testFolderName = "deletefolder_" + guid;
             string testFolderPath = System.IO.Path.Combine(folderPath, testFolderName);
             DeleteFolder(testFolderPath);
             CreateFolder(testFolderPath);
@@ -313,30 +314,49 @@ namespace TestMyExplorer
             TestDeleteCore(testFolderName, testFolderPath, System.IO.Directory.Exists);
         }
 
-        private string CreateGuid()
-        {
-            return System.Guid.NewGuid().ToString("N");
-        }
-
         private void TestDeleteCore(string name, string path, Func<string, bool> func)
         {
             // 準備: ごみ箱に存在しないこと
-            string trashPath = @"c:\$Recycle.Bin\ごみ箱";
-            string trashFullPath = System.IO.Path.Combine(trashPath, name);
-            Assert.IsFalse(func(trashFullPath));
+            var bins = GetFileNamesInRecycleBin();
+            Assert.IsFalse(bins.Contains(name));
 
-            Driver.FocusFile(name);
+            // 準備: ファイル/フォルダが存在すること
             Assert.IsTrue(Driver.ContainFile(name));
             Assert.IsTrue(func(path));
-            Driver.EmurateKey(Key.F10, ModifierKeys.Shift);
 
-            // 存在しないことの確認
+            // 削除実行
+            Driver.FocusFile(name);
+            Driver.EmurateKey(Key.F10, ModifierKeys.Shift);
             new FileMenuWindowDriver(App).Delete();
+
+            // 削除されたことの確認
             Assert.IsFalse(Driver.ContainFile(name));
             Assert.IsFalse(func(path));
 
-            // ゴミ箱には存在することの確認
-            Assert.IsTrue(func(trashFullPath));
+            // ごみ箱には存在することの確認
+            bins = GetFileNamesInRecycleBin();
+            Assert.IsTrue(bins.Contains(name));
+        }
+
+        private System.Collections.Generic.List<string> GetFileNamesInRecycleBin()
+        {
+            System.Collections.Generic.List<string> result = new System.Collections.Generic.List<string>();
+
+            // 参考: http://nonsoft.la.coocan.jp/SoftSample/CS.NET/SampleRccList.html
+            // 要作業(1): 参照に COM: Microsoft Shell Controls And Automation を追加 -> Shell32 と表示される
+            // 要作業(2): 参照の Shell32 の "相互運用型の埋め込み" を False に変更する
+            Shell32.ShellClass shl = new Shell32.ShellClass();
+            Shell32.Folder fol = shl.NameSpace(10);
+
+            foreach (Shell32.FolderItem folderItem in fol.Items())
+            {
+                // ごみ箱内のパスはもとのファイル名ではないので、ごみ箱内ファイルのもとのファイル名を取得
+                // ex) folderItem.Path = C:\\$Recycle.Bin\\S-1-5-21-638183743-3077767593-1375336953-1001\\$R22YH79.txt
+                string beforeFileName = fol.GetDetailsOf(folderItem, 0);    // 0 -> ファイル名 / 1 -> もとのフォルダパス / 2 -> 削除日 / etc....
+                result.Add(beforeFileName);
+            }
+
+            return result;
         }
     }
 }

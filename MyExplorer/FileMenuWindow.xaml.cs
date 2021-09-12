@@ -11,6 +11,8 @@ namespace MyExplorer
     {
         public List<FileExecute> FileExecutes { get; private set; }
 
+        public bool IsFileChanged { get; private set; } = false;
+
         public FileMenuWindow(string filePath)
         {
             InitializeComponent();
@@ -26,6 +28,7 @@ namespace MyExplorer
             FileExecutes.Add(new FileExecuteShowProgram(2, "プログラムから開く", filePath));
             FileExecutes.Add(new FileExecuteZip(3, "zip圧縮", filePath));
             FileExecutes.Add(new FileExecuteSetClipboard(4, "パスコピー", filePath));
+            FileExecutes.Add(new FileExecuteSendRecycleBin(5, "削除", filePath));
         }
 
         public void SetFocus()
@@ -113,6 +116,7 @@ namespace MyExplorer
         private void Execute(FileExecute fe)
         {
             fe.Execute();
+            IsFileChanged = fe.IsFileChanged;
             Close();
         }
     }

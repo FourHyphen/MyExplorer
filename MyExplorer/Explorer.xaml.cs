@@ -169,10 +169,15 @@ namespace MyExplorer
             }
         }
 
-        public void NotifyPropertyChanged(string name)
+        private void NotifyPropertyChanged(string name)
         {
             var e = new PropertyChangedEventArgs(name);
             PropertyChanged?.Invoke(this, e);
+        }
+
+        public void DataChanged()
+        {
+            NotifyPropertyChanged(nameof(Data));
         }
 
         public bool IsFocusedItemInFileList()

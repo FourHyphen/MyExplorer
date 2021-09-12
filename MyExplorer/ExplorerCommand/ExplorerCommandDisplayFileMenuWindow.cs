@@ -40,6 +40,15 @@ namespace MyExplorer
             // ウィンドウ閉じただけだとフォーカスは宙ぶらりんになったので明示的に指定
             Explorer.FolderFileList.Focus();
             System.Windows.Input.Keyboard.Focus(Explorer.FolderFileList);
+
+            // 新規作成 / 削除等で変更があった場合は Data を丸ごと更新
+            FileMenuWindow fmw = (FileMenuWindow)sender;
+            if (fmw.IsFileChanged)
+            {
+                Explorer.Data.Update(out bool isChanged);
+                IsDataChanged = isChanged;
+                Explorer.DataChanged();
+            }
         }
 
         private Window GetParentWindow(FrameworkElement elem)

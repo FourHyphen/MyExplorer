@@ -34,6 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\WindowsAPICodePack-Core.1.1.1\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
     </Reference>
@@ -96,6 +97,7 @@
     <Compile Include="ExplorerData.cs" />
     <Compile Include="ExplorerFileInfo.cs" />
     <Compile Include="FileExecute.cs" />
+    <Compile Include="FileExecuteSendRecycleBin.cs" />
     <Compile Include="FileExecuteOpen.cs" />
     <Compile Include="FileExecuteSetClipboard.cs" />
     <Compile Include="FileExecuteShowProgram.cs" />

@@ -11,6 +11,8 @@ namespace MyExplorer
 
         protected string FilePath { get; set; }
 
+        public bool IsFileChanged { get; protected set; } = false;
+
         public FileExecute(int index, string name, string filePath)
         {
             Index = index;
