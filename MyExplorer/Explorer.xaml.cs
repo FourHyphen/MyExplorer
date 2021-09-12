@@ -23,9 +23,9 @@ namespace MyExplorer
 
         public ExplorerData Data { get; private set; }
 
-        public object SelectedItem { get; set; }
-
         public ExplorerDisplay Display { get; private set; }
+
+        public object SelectedItem { get; set; }
 
         public Explorer(string folderPath, MainWindow main)
         {
@@ -35,9 +35,11 @@ namespace MyExplorer
 
         private void Init(string folderPath, MainWindow main)
         {
-            Data = new ExplorerData(folderPath);
-            Display = new ExplorerDisplay(main);
             DataContext = this;
+
+            Data = new ExplorerData(folderPath);
+            Display = new ExplorerDisplay((int)main.ActualWidth, (int)main.ActualHeight);
+
             main.FoldersArea.Children.Clear();
             main.FoldersArea.Children.Add(this);
         }

@@ -20,16 +20,16 @@ namespace MyExplorer
 
         public int FolderFileListAreaHeight { get; private set; }
 
-        public ExplorerDisplay(MainWindow main)
+        public ExplorerDisplay(int mainWindowActualWidth, int mainWindowActualHeight)
         {
-            SetPosition(main);
+            SetPosition(mainWindowActualWidth, mainWindowActualHeight);
         }
 
-        private void SetPosition(MainWindow main)
+        private void SetPosition(int mainWindowActualWidth, int mainWindowActualHeight)
         {
             int scrollBar = 10;                     // 10: 経験則
-            int width = (int)main.ActualWidth - scrollBar;
-            int height = (int)main.ActualHeight - scrollBar - 50;    // 50: 経験則
+            int width = mainWindowActualWidth - scrollBar;
+            int height = mainWindowActualHeight - scrollBar - 50;    // 50: 経験則
 
             SetWidth(width);
             SetHeight(height);
