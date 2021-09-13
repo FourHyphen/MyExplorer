@@ -358,5 +358,36 @@ namespace TestMyExplorer
 
             return result;
         }
+
+        [TestMethod]
+        public void RenameFromShortcutKey()
+        {
+            // 準備: Rename するファイル/フォルダの作成
+            string guid = System.Guid.NewGuid().ToString("N");
+            string workFolderPath = Common.GetFilePathOfDependentEnvironment(@".\TestData\Folder1");
+            string beforeFileName = "renametest_" + guid + ".txt";
+            string beforeFilePath = System.IO.Path.Combine(workFolderPath, beforeFileName);
+            DeleteFile(beforeFilePath);
+            CreateFile(beforeFilePath);
+
+            Driver.OpenFolder(workFolderPath);
+
+            // 準備: Rename 先: 存在しないことの確認
+            string afterFileName = beforeFileName + "_rename.txt";
+            string afterFilePath = System.IO.Path.Combine(workFolderPath, afterFileName);
+            Assert.IsFalse(Driver.ContainFile(afterFileName));
+            Assert.IsFalse(System.IO.Directory.Exists(afterFilePath));
+
+            // Rename 実施
+            Driver.FocusFile(beforeFileName);
+            Driver.EmurateKey(Key.F10, ModifierKeys.Shift);
+            new FileMenuWindowDriver(App).Rename(afterFileName);
+
+            // Rename 前が存在せず、Rename 後が存在すればOK
+            Assert.IsFalse(Driver.ContainFile(beforeFileName));
+            Assert.IsFalse(System.IO.Directory.Exists(beforeFilePath));
+            Assert.IsTrue(Driver.ContainFile(afterFileName));
+            Assert.IsTrue(System.IO.Directory.Exists(afterFilePath));
+        }
     }
 }

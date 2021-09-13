@@ -71,6 +71,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="FileRenameWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -100,6 +104,7 @@
     <Compile Include="ExplorerFileInfo.cs" />
     <Compile Include="ExplorerProcessItemList.cs" />
     <Compile Include="FileExecute.cs" />
+    <Compile Include="FileExecuteRename.cs" />
     <Compile Include="FileExecuteSendRecycleBin.cs" />
     <Compile Include="FileExecuteOpen.cs" />
     <Compile Include="FileExecuteSetClipboard.cs" />
@@ -107,6 +112,9 @@
     <Compile Include="FileExecuteZip.cs" />
     <Compile Include="FileMenuWindow.xaml.cs">
       <DependentUpon>FileMenuWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FileRenameWindow.xaml.cs">
+      <DependentUpon>FileRenameWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Keys.cs" />
     <Compile Include="MainWindow.xaml.cs">
