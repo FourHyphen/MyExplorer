@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,21 +24,65 @@ namespace MyExplorer
 
         public string AfterName { get; private set; }
 
-        public FileRenameWindow(string nowName)
+        private string NowPath { get; set; }
+
+        public FileRenameWindow(string nowPath)
         {
             InitializeComponent();
-            Init(nowName);
+            DataContext = this;
+            Init(nowPath);
         }
 
-        private void Init(string nowName)
+        private void Init(string nowPath)
         {
-            NowName = nowName;
+            NowPath = nowPath;
+            InitText();
+            AfterNameTextBox.Focus();
+        }
+
+        private void InitText()
+        {
+            NowName = System.IO.Path.GetFileName(NowPath);
+            AfterName = (string)NowName.Clone();
             NotifyPropertyChanged(nameof(NowName));
+            NotifyPropertyChanged(nameof(AfterName));
         }
 
         private void OKButtonClicked(object sender, RoutedEventArgs e)
         {
+            Rename();
             Close();
+        }
+
+        private void Rename()
+        {
+            if (Common.IsFolder(NowPath))
+            {
+                RenameFolder();
+            }
+            else
+            {
+                RenameFile();
+            }
+        }
+
+        private void RenameFolder()
+        {
+            RenameCore("System.IO.Directory");
+        }
+
+        private void RenameFile()
+        {
+            RenameCore("System.IO.File");
+        }
+
+        private void RenameCore(string moveFuncClassName)
+        {
+            string dirPath = System.IO.Path.GetDirectoryName(NowPath);
+            string toPath = System.IO.Path.Combine(dirPath, AfterName);
+
+            MethodInfo mi = Type.GetType(moveFuncClassName).GetMethod("Move");
+            mi.Invoke(null, new object[] { NowPath, toPath });
         }
 
         private void CancelButtonClicked(object sender, RoutedEventArgs e)

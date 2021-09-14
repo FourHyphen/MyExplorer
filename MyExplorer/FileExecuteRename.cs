@@ -14,14 +14,7 @@ namespace MyExplorer
 
         private void ShowRenameWindow()
         {
-            FileRenameWindow frw = new FileRenameWindow(System.IO.Path.GetFileName(FilePath));
-            frw.Closed += Frw_Closed;
-            frw.ShowDialog();
-        }
-
-        private void Frw_Closed(object sender, EventArgs e)
-        {
-
+            new FileRenameWindow(FilePath).ShowDialog();
         }
     }
 }

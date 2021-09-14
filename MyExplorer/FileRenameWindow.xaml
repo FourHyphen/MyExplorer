@@ -5,30 +5,64 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyExplorer"
         mc:Ignorable="d"
-        Title="Rename" Height="120" Width="300">
+        Title="Rename" Height="120" Width="400">
     <Grid>
-        <StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Label Content="現在"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="7*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
+                <Label Content="現在　"/>
+            </Grid>
+
+            <Grid Grid.Column="1">
                 <Label Content="{Binding NowName}"/>
-            </StackPanel>
+            </Grid>
+        </Grid>
 
-            <StackPanel Orientation="Horizontal">
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="7*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
                 <Label Content="変更後"/>
-                <TextBox x:Name="AfterNameTextBox"
-                         Text="{Binding AfterName}"
-                         Width="200"/>
-            </StackPanel>
+            </Grid>
 
-            <StackPanel Orientation="Horizontal"
-                        Margin="10">
+            <Grid Grid.Column="1">
+                <TextBox x:Name="AfterNameTextBox"
+                         Text="{Binding AfterName}"/>
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0"
+                      Margin="1">
                 <Button x:Name="OKButton"
                         Content="OK"
                         Click="OKButtonClicked"/>
+            </Grid>
+
+            <Grid Grid.Column="1"
+                      Margin="1">
                 <Button x:Name="CancelButton"
                         Content="Cancel"
                         Click="CancelButtonClicked"/>
-            </StackPanel>
-        </StackPanel>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>

@@ -11,5 +11,15 @@ namespace MyExplorer
         public static readonly string MoveOneUpFolderString = "(←)";
 
         public static readonly string TypeFolderString = "Folder";
+
+        /// <summary>
+        /// 存在するファイル/フォルダのパスがフォルダかを返す
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static bool IsFolder(string path)
+        {
+            return System.IO.Directory.Exists(path);
+        }
     }
 }

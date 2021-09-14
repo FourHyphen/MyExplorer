@@ -360,34 +360,59 @@ namespace TestMyExplorer
         }
 
         [TestMethod]
-        public void RenameFromShortcutKey()
+        public void RenameFromFileMenuWindow()
         {
-            // 準備: Rename するファイル/フォルダの作成
             string guid = System.Guid.NewGuid().ToString("N");
             string workFolderPath = Common.GetFilePathOfDependentEnvironment(@".\TestData\Folder1");
+
+            // 準備: Rename するファイルの作成
             string beforeFileName = "renametest_" + guid + ".txt";
             string beforeFilePath = System.IO.Path.Combine(workFolderPath, beforeFileName);
             DeleteFile(beforeFilePath);
             CreateFile(beforeFilePath);
 
-            Driver.OpenFolder(workFolderPath);
+            // 準備: Rename するフォルダの作成
+            string beforeFolderName = "renametest_" + guid;
+            string beforeFolderPath = System.IO.Path.Combine(workFolderPath, beforeFolderName);
+            DeleteFolder(beforeFolderPath);
+            CreateFolder(beforeFolderPath);
 
-            // 準備: Rename 先: 存在しないことの確認
+            // 準備: Rename 先ファイル
             string afterFileName = beforeFileName + "_rename.txt";
             string afterFilePath = System.IO.Path.Combine(workFolderPath, afterFileName);
-            Assert.IsFalse(Driver.ContainFile(afterFileName));
-            Assert.IsFalse(System.IO.Directory.Exists(afterFilePath));
+
+            // 準備: Rename 先フォルダ
+            string afterFolderName = beforeFolderName + "_rename";
+            string afterFolderPath = System.IO.Path.Combine(workFolderPath, afterFolderName);
+
+            Driver.OpenFolder(workFolderPath);
+
+            RenameTestCore(beforeFilePath, afterFilePath, System.IO.File.Exists);
+            RenameTestCore(beforeFolderPath, afterFolderPath, System.IO.Directory.Exists);
+
+            // 後始末
+            DeleteFile(afterFilePath);
+            DeleteFolder(afterFolderPath);
+        }
+
+        private void RenameTestCore(string beforePath, string afterPath, Func<string, bool> exists)
+        {
+            // 準備: Rename 先: 存在しないことの確認
+            string beforeName = System.IO.Path.GetFileName(beforePath);
+            string afterName = System.IO.Path.GetFileName(afterPath);
+            Assert.IsFalse(Driver.ContainFile(afterName));
+            Assert.IsFalse(exists(afterPath));
 
             // Rename 実施
-            Driver.FocusFile(beforeFileName);
+            Driver.FocusFile(beforeName);
             Driver.EmurateKey(Key.F10, ModifierKeys.Shift);
-            new FileMenuWindowDriver(App).Rename(afterFileName);
+            new FileMenuWindowDriver(App).Rename(afterName);
 
             // Rename 前が存在せず、Rename 後が存在すればOK
-            Assert.IsFalse(Driver.ContainFile(beforeFileName));
-            Assert.IsFalse(System.IO.Directory.Exists(beforeFilePath));
-            Assert.IsTrue(Driver.ContainFile(afterFileName));
-            Assert.IsTrue(System.IO.Directory.Exists(afterFilePath));
+            Assert.IsFalse(Driver.ContainFile(beforeName));
+            Assert.IsFalse(exists(beforePath));
+            Assert.IsTrue(Driver.ContainFile(afterName));
+            Assert.IsTrue(exists(afterPath));
         }
     }
 }
