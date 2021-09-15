@@ -126,7 +126,7 @@ namespace TestMyExplorer
             string testFilePath = System.IO.Path.Combine(folderPath, testFileName);
 
             // 準備
-            DeleteFile(testFilePath);
+            Delete(testFilePath);
 
             Driver.OpenFolder(folderPath);
             Assert.IsFalse(Driver.ContainFile(testFileName));
@@ -140,7 +140,7 @@ namespace TestMyExplorer
             Assert.IsTrue(Driver.ContainFile(testFileName));
 
             // 後始末
-            DeleteFile(testFilePath);
+            Delete(testFilePath);
         }
 
         private void CreateFile(string filePath)
@@ -148,11 +148,15 @@ namespace TestMyExplorer
             System.IO.File.WriteAllText(filePath, "test");
         }
 
-        private void DeleteFile(string filePath)
+        private void Delete(string path)
         {
-            if (System.IO.File.Exists(filePath))
+            if (System.IO.File.Exists(path))
             {
-                System.IO.File.Delete(filePath);
+                System.IO.File.Delete(path);
+            }
+            else if (System.IO.Directory.Exists(path))
+            {
+                System.IO.Directory.Delete(path, true);
             }
         }
 
@@ -165,7 +169,7 @@ namespace TestMyExplorer
             string testFolderPath = System.IO.Path.Combine(folderPath, testFolderName);
 
             // 準備
-            DeleteFolder(testFolderPath);
+            Delete(testFolderPath);
 
             // ファイルが 1 つも存在しないフォルダの場合
             CreateFolder(testFolderPath);
@@ -182,15 +186,7 @@ namespace TestMyExplorer
             Assert.IsTrue(Driver.ContainFile(testFileName));
 
             // 後始末
-            DeleteFolder(testFolderPath);
-        }
-
-        private void DeleteFolder(string folderPath)
-        {
-            if (System.IO.Directory.Exists(folderPath))
-            {
-                System.IO.Directory.Delete(folderPath, true);
-            }
+            Delete(testFolderPath);
         }
 
         private void CreateFolder(string folderPath)
@@ -237,7 +233,7 @@ namespace TestMyExplorer
             string folderPath = Common.GetFilePathOfDependentEnvironment(@".\TestData\Folder1");
             string zipName = "text11.zip";
             string zipPath = System.IO.Path.Combine(folderPath, zipName);
-            DeleteFile(zipPath);
+            Delete(zipPath);
 
             // ファイルメニュー画面表示
             string fileName = "text11.txt";
@@ -253,7 +249,7 @@ namespace TestMyExplorer
             Assert.IsTrue(Driver.ContainFile(zipName));
 
             // 後始末
-            DeleteFile(zipPath);
+            Delete(zipPath);
         }
 
         [TestMethod]
@@ -296,13 +292,13 @@ namespace TestMyExplorer
             string folderPath = Common.GetFilePathOfDependentEnvironment(@".\TestData\Folder1");
             string testFileName = "deletetest_" + guid + ".txt";
             string testFilePath = System.IO.Path.Combine(folderPath, testFileName);
-            DeleteFile(testFilePath);
+            Delete(testFilePath);
             CreateFile(testFilePath);
 
             // 準備: 削除するフォルダを作成
             string testFolderName = "deletefolder_" + guid;
             string testFolderPath = System.IO.Path.Combine(folderPath, testFolderName);
-            DeleteFolder(testFolderPath);
+            Delete(testFolderPath);
             CreateFolder(testFolderPath);
 
             Driver.OpenFolder(folderPath);
@@ -368,13 +364,13 @@ namespace TestMyExplorer
             // 準備: Rename するファイルの作成
             string beforeFileName = "renametest_" + guid + ".txt";
             string beforeFilePath = System.IO.Path.Combine(workFolderPath, beforeFileName);
-            DeleteFile(beforeFilePath);
+            Delete(beforeFilePath);
             CreateFile(beforeFilePath);
 
             // 準備: Rename するフォルダの作成
             string beforeFolderName = "renametest_" + guid;
             string beforeFolderPath = System.IO.Path.Combine(workFolderPath, beforeFolderName);
-            DeleteFolder(beforeFolderPath);
+            Delete(beforeFolderPath);
             CreateFolder(beforeFolderPath);
 
             // 準備: Rename 先ファイル
@@ -391,8 +387,8 @@ namespace TestMyExplorer
             RenameTestCore(beforeFolderPath, afterFolderPath, System.IO.Directory.Exists);
 
             // 後始末
-            DeleteFile(afterFilePath);
-            DeleteFolder(afterFolderPath);
+            Delete(afterFilePath);
+            Delete(afterFolderPath);
         }
 
         private void RenameTestCore(string beforePath, string afterPath, Func<string, bool> exists)
